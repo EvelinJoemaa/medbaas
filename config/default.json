@@ -6,8 +6,8 @@
     "database": {
         "port": "3306",
         "host": "localhost",
-        "db": "news",
-        "username": "root",
-        "password": "Tere12345"
+        "db": "health_one_medical_database",
+        "username": "CustomUser",
+        "password": "Passw0rd"
     }
 }
