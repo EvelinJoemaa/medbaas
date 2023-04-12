@@ -1,4 +1,6 @@
-import {Entity, BaseEntity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
+import {Patient} from "./Patient";
+import {Doctor} from "./Doctor";
 
 @Entity()
 export class Prescriptions extends BaseEntity{
@@ -26,9 +28,11 @@ export class Prescriptions extends BaseEntity{
     @Column({ type: "varchar", length: 50, nullable: true })
     Reason!: string;
 
-    @Column({ type: "int" })
-    PatientID!: number;
+    @ManyToOne(() => Patient)
+    @JoinColumn({ name: "PatientID" })
+    patient!: Patient;
 
-    @Column({ type: "int" })
-    DoctorID!: number;
+    @ManyToOne(() => Doctor)
+    @JoinColumn({ name: "DoctorID" })
+    doctor!: Doctor;
 }
