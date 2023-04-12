@@ -7,128 +7,126 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/api", (req, res) => {
-    // output APIdoc page
-    res.end("Hello");
-});
-
-// GET - info päring (kõik artiklid)
+// GET - info päring (kõik kindlustused)
 app.get("/api/insurances", async (req, res) => {
     try {
-        // küsi artiklid andmebaasist
+        // küsi kindlustused andmebaasist
         const insurances = await dataSource.getRepository(Insurances).find();
 
-        // vasta artiklite kogumikuga JSON formaadis
+        // vasta kindlustuste kogumikuga JSON formaadis
         return res.status(200).json({ data: insurances });
     } catch (error) {
         console.log("ERROR", { message: error });
 
         // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not fetch articles" });
+        return res.status(500).json({ message: "Could not fetch insurances" });
     }
 });
 
-// // POST - saadab infot
-// app.post("/api/insurances", async (req, res) => {
-//     try {
-//         const { InsuranceCompanyName } = req.body;
-//
-//         // TODO: validate & santize
-//         if (!InsuranceCompanyName) {
-//             return res
-//                 .status(400)
-//                 .json({ error: "Articles has to have title and body" });
-//         }
-//
-//         // create new insurance company with given parameters
-//         const lol = lol.create({
-//             InsuranceCompanyName: InsuranceCompanyName.trim() ?? ""
-//         });
-//
-//         //save article to database
-//         const result = await insuranceName.save();
-//
-//         return res.status(200).json({ data: result });
-//     } catch (error) {
-//         console.log("ERROR", { message: error });
-//
-//         // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-//         return res.status(500).json({ message: "Could not fetch articles" });
-//     }
-// });
-//
-// // GET - info päring (üksik artikkel)
-// app.get("/api/articles/:id", async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//
-//         const article = await dataSource
-//             .getRepository()
-//             .findOneBy({ id: parseInt(id) });
-//
-//         return res.status(200).json({ data: article });
-//     } catch (error) {
-//         console.log("ERROR", { message: error });
-//
-//         // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-//         return res.status(500).json({ message: "Could not fetch articles" });
-//     }
-// });
-//
-// // PUT - update
-// app.put("/api/articles/:id", async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const { title, body } = req.body;
-//
-//         const article = await dataSource
-//             .getRepository(Article)
-//             .findOneBy({ id: parseInt(id) });
-//
-//         if (!article) {
-//             return res.status(404).json({ error: "Article not found" });
-//         }
-//
-//         // uuendame andmed objektis (lokaalne muudatus)
-//         article.title = title ? title : article.title;
-//         article.body = body ? body : article.body;
-//         //salvestame muudatused andmebaasi
-//         const result = await article.save();
-//
-//         // saadame vastu uuendatud andmed (kui midagi töödeldakse serveris on seda vaja kuvada)
-//         return res.status(200).json({ data: result });
-//     } catch (error) {
-//         console.log("ERROR", { message: error });
-//
-//         // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-//         return res.status(500).json({ message: "Could not update articles" });
-//     }
-// });
-//
-// // DELETE - kustutamine
-// app.delete("/api/articles/:id", async(req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const { title, body } = req.body;
-//
-//         const article = await dataSource
-//             .getRepository()
-//             .findOneBy({ id: parseInt(id) });
-//
-//         if (!article) {
-//             return res.status(404).json({ error: "Article not found" });
-//         }
-//
-//         const result = await article.remove();
-//
-//         // tagastame igaks juhuks kustutatud andmed
-//         return res.status(200).json({ data: result });
-//     } catch (error) {
-//         console.log("ERROR", { message: error });
-//
-//         // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-//         return res.status(500).json({ message: "Could not update articles" });
-//     }
-// });
+// GET - info päring (üksik kindlustus)
+app.get("/api/insurances/:id", async (req, res) => {
+    try {
+        const { id }  = req.params;
+
+        const insurances = await dataSource
+            .getRepository(Insurances)
+            .findOneBy({ InsuranceID: parseInt(id) });
+
+        return res.status(200).json({ data: insurances });
+    } catch (error) {
+        console.log("ERROR", { message: error });
+
+        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
+        return res.status(500).json({ message: "Could not fetch insurances" });
+    }
+});
+
+// POST - saadab kindlustuse infot
+app.post("/api/insurances", async (req, res) => {
+    try {
+        const { InsuranceCompanyName } = req.body;
+
+        // validate & sanitize
+        if (!InsuranceCompanyName || InsuranceCompanyName === " ") {
+            return res
+                .status(400)
+                .json({ error: "Insurance company has to have a valid name" });
+        }
+
+        // create new insurance company with given parameters
+        const insurance = dataSource.getRepository(Insurances).create(req.body);
+
+        // save insurance to database
+        const result = await dataSource.getRepository(Insurances).save(insurance);
+        return res.status(200).json({ data: result });
+
+    } catch (error) {
+        console.log("ERROR", { message: error });
+
+        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
+        return res.status(500).json({ message: "Could not fetch insurances" });
+    }
+});
+
+// PUT - uuendab kindlustuse infot
+app.put("/api/insurances/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { InsuranceCompanyName } = req.body;
+
+        // validate & sanitize
+        if (!InsuranceCompanyName || InsuranceCompanyName === " ") {
+            return res
+                .status(400)
+                .json({ error: "Insurance company has to have a valid name" });
+        }
+
+        const insurance = await dataSource
+            .getRepository(Insurances)
+            .findOneBy({ InsuranceID: parseInt(id) });
+
+        if (!insurance) {
+            return res.status(404).json({ error: "Insurance not found" });
+        }
+
+        dataSource.getRepository(Insurances).merge(insurance, req.body);
+
+        //salvestame muudatused andmebaasi
+        const result = await dataSource.getRepository(Insurances).save(insurance);
+
+        // saadame vastu uuendatud andmed (kui midagi töödeldakse serveris on seda vaja kuvada)
+        return res.status(200).json({ data: result });
+    } catch (error) {
+        console.log("ERROR", { message: error });
+
+        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
+        return res.status(500).json({ message: "Could not update insurances" });
+    }
+});
+
+// DELETE - kustutamine
+app.delete("/api/insurances/:id", async(req, res) => {
+    try {
+        const { id } = req.params;
+
+        const insurance = await dataSource
+            .getRepository(Insurances)
+            .findOneBy({ InsuranceID: parseInt(id) });
+
+        if (!insurance) {
+            return res.status(404).json({ error: "Insurance not found" });
+        }
+
+        const result = await dataSource.getRepository(Insurances).remove(insurance);
+
+        // tagastame igaks juhuks kustutatud andmed
+        return res.status(200).json({ data: result });
+    } catch (error) {
+        console.log("ERROR", { message: error });
+
+        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
+        return res.status(500).json({ message: "Could not update insurances" });
+    }
+});
 
 export default app;
