@@ -1,12 +1,14 @@
-import {Entity, BaseEntity, PrimaryColumn, Column} from "typeorm";
+import {Entity, BaseEntity, PrimaryColumn, Column, ManyToOne, JoinColumn} from "typeorm";
+import {Patient} from "./Patient";
 
 @Entity()
 export class PrimaryDoctorHistory extends BaseEntity{
     @PrimaryColumn({ type: "datetime" })
     StartDate!: Date;
 
-    @Column({ type: "int" })
-    PatientID!: number;
+    @ManyToOne(() => Patient)
+    @JoinColumn({ name: "PatientID" })
+    patient!: Patient;
 
     @Column({ type: "int" })
     DoctorID!: number;
