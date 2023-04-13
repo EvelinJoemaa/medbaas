@@ -3,17 +3,17 @@ import {Entity, BaseEntity, PrimaryGeneratedColumn, Column} from "typeorm";
 @Entity()
 export class Drugs extends BaseEntity{
     @PrimaryGeneratedColumn({ type: "int" })
-    DrugID!: number;
+    drugID!: number;
 
     @Column({ type: "varchar", length: 50 })
-    DrugName!: string;
+    drugName!: string;
 
     @Column({ type: "varchar", length: 50 })
-    DrugPurpose!: string;
+    drugPurpose!: string;
 
     @Column({ type: "varchar", length: 50 })
-    DrugUse!: string;
+    drugUse!: string;
 
     @Column({ type: "varchar", length: 50 })
-    SideEffects!: string;
+    sideEffects!: string;
 }

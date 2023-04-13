@@ -1,38 +1,38 @@
 import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {Patient} from "./Patient";
-import {Doctor} from "./Doctor";
+import {Patients} from "./Patient";
+import {Doctors} from "./Doctor";
 
 @Entity()
 export class Prescriptions extends BaseEntity{
     @PrimaryGeneratedColumn({ type: "int" })
-    PrescriptionID!: number;
+    prescriptionID!: number;
 
     @Column({ type: "datetime" })
-    DatePrescribed!: Date;
+    datePrescribed!: Date;
 
     @Column({ type: "int" })
-    Dosage!: number;
+    dosage!: number;
 
     @Column({ type: "int" })
-    Duration!: number;
+    duration!: number;
 
     @Column({ type: "boolean" })
-    Refillable!: boolean;
+    refillable!: boolean;
 
     @Column({ type: "int", nullable: true })
-    NumberOfRefills!: number;
+    numberOfRefills!: number;
 
     @Column({ type: "int", nullable: true })
-    RefillSize!: number;
+    refillSize!: number;
 
     @Column({ type: "varchar", length: 50, nullable: true })
-    Reason!: string;
+    reason!: string;
 
-    @ManyToOne(() => Patient)
+    @ManyToOne(() => Patients)
     @JoinColumn({ name: "PatientID" })
-    patient!: Patient;
+    patient!: Patients;
 
-    @ManyToOne(() => Doctor)
+    @ManyToOne(() => Doctors)
     @JoinColumn({ name: "DoctorID" })
-    doctor!: Doctor;
+    doctor!: Doctors;
 }

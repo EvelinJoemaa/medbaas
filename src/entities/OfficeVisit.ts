@@ -1,42 +1,42 @@
 import {Entity, BaseEntity, PrimaryColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {Patient} from "./Patient";
-import {Doctor} from "./Doctor";
+import {Patients} from "./Patient";
+import {Doctors} from "./Doctor";
 
 @Entity()
 export class OfficeVisits extends BaseEntity{
     @PrimaryColumn({ type: "int" })
-    PatientID!: number;
-    @ManyToOne(() => Patient)
-    @JoinColumn({ name: "PatientID" })
-    patient!: Patient;
+    patientID!: number;
+    @ManyToOne(() => Patients)
+    @JoinColumn({ name: "patientID" })
+    patient!: Patients;
 
     @PrimaryColumn({ type: "int" })
-    DoctorID!: number;
-    @ManyToOne(() => Doctor)
-    @JoinColumn({ name: "DoctorID" })
-    doctor!: Doctor;
+    doctorID!: number;
+    @ManyToOne(() => Doctors)
+    @JoinColumn({ name: "doctorID" })
+    doctor!: Doctors;
 
     @PrimaryColumn({ type: "datetime" })
-    DateOfVisit!: Date;
+    dateOfVisit!: Date;
 
     @Column({ type: "varchar", length: 50, nullable: true })
-    Symptoms!: string;
+    symptoms!: string;
 
     @Column({ type: "varchar", length: 50, nullable: true })
-    InitialDiagnosis!: string;
+    initialDiagnosis!: string;
 
     @Column({ type: "varchar", length: 50, nullable: true })
-    DiagnosisStatus!: string;
+    diagnosisStatus!: string;
 
     @Column({ type: "int", nullable: true })
-    BloodPressure!: number;
+    bloodPressure!: number;
 
     @Column({ type: "int", nullable: true })
-    Weight!: number;
+    weight!: number;
 
     @Column({ type: "int", nullable: true })
-    Height!: number;
+    height!: number;
 
     @Column({ type: "varchar", length: 50, nullable: true })
-    Diagnosis!: string;
+    diagnosis!: string;
 }

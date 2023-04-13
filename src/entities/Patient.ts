@@ -1,32 +1,32 @@
 import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {Insurance} from "./Insurance";
-import {Doctor} from "./Doctor";
+import {Insurances} from "./Insurance";
+import {Doctors} from "./Doctor";
 
 @Entity()
 export class Patients extends BaseEntity{
     @PrimaryGeneratedColumn({ type: "int" })
-    PatientID!: number;
+    patientID!: number;
 
     @Column({ type: "varchar", length: 50 })
-    Name!: string;
+    name!: string;
 
     @Column({ type: "varchar", length: 50 })
-    Address!: string;
+    address!: string;
 
     @Column({ type: "int" })
-    PhoneNumber!: number;
+    phoneNumber!: number;
 
     @Column({ type: "varchar", length: 50, nullable: true })
-    Email!: string;
+    email!: string;
 
-    @ManyToOne(() => Insurance)
+    @ManyToOne(() => Insurances)
     @JoinColumn({ name: "InsuranceIFNumber" })
-    insurance!: Insurance;
+    insurance!: Insurances;
 
     @Column({ type: "int", nullable: true })
-    InsuranceHolderID!: number;
+    insuranceHolderID!: number;
 
-    @ManyToOne(() => Doctor)
+    @ManyToOne(() => Doctors)
     @JoinColumn({ name: "DoctorID" })
-    doctor!: Doctor;
+    doctor!: Doctors;
 }

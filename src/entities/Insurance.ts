@@ -4,8 +4,8 @@ import { PrimaryGeneratedColumn, Column, Entity, BaseEntity } from "typeorm";
 @Entity()
 export class Insurances extends BaseEntity{
     @PrimaryGeneratedColumn({type: "int" })
-    InsuranceID!: number;
+    insuranceID!: number;
 
     @Column({ type: "varchar", length: 50 })
-    InsuranceCompanyName!: string;
+    insuranceCompanyName!: string;
 }

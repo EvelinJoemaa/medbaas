@@ -1,23 +1,23 @@
 import {Entity, BaseEntity, PrimaryColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {Patient} from "./Patient";
-import {Doctor} from "./Doctor";
+import {Patients} from "./Patient";
+import {Doctors} from "./Doctor";
 
 @Entity()
 export class PrimaryDoctorHistory extends BaseEntity{
     @PrimaryColumn({ type: "datetime" })
-    StartDate!: Date;
+    startDate!: Date;
 
-    @ManyToOne(() => Patient)
+    @ManyToOne(() => Patients)
     @JoinColumn({ name: "PatientID" })
-    patient!: Patient;
+    patient!: Patients;
 
-    @ManyToOne(() => Doctor)
+    @ManyToOne(() => Doctors)
     @JoinColumn({ name: "DoctorID" })
-    doctor!: Doctor;
+    doctor!: Doctors;
 
     @Column({ type: "varchar", length: 50 })
-    DoctorName!: string;
+    doctorName!: string;
 
     @Column({ type: "datetime", nullable: true })
-    EndDate!: Date;
+    endDate!: Date;
 }

@@ -3,11 +3,11 @@ import {Entity, BaseEntity, Column, PrimaryColumn} from "typeorm";
 @Entity()
 export class HospitalAffiliations extends BaseEntity{
     @PrimaryColumn({ type: "datetime" })
-    DateOfAffiliation!: Date;
+    dateOfAffiliation!: Date;
 
     @Column({ type: "int" })
-    DoctorID!: number;
+    doctorID!: number;
 
     @Column({ type: "int" })
-    HospitalID!: number;
+    hospitalID!: number;
 }
