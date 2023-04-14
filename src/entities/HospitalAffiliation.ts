@@ -2,8 +2,8 @@ import {Entity, BaseEntity, Column, PrimaryColumn} from "typeorm";
 
 @Entity()
 export class HospitalAffiliations extends BaseEntity{
-    @PrimaryColumn({ type: "datetime" })
-    dateOfAffiliation!: Date;
+    @PrimaryColumn({ type: "bigint" })
+    dateOfAffiliation!: number;
 
     @Column({ type: "int" })
     doctorID!: number;

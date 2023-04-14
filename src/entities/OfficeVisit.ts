@@ -16,8 +16,8 @@ export class OfficeVisits extends BaseEntity{
     @JoinColumn({ name: "doctorID" })
     doctor!: Doctors;
 
-    @PrimaryColumn({ type: "datetime" })
-    dateOfVisit!: Date;
+    @PrimaryColumn({ type: "bigint" })
+    dateOfVisit!: number;
 
     @Column({ type: "varchar", length: 50, nullable: true })
     symptoms!: string;

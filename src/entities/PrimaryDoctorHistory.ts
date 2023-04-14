@@ -4,20 +4,20 @@ import {Doctors} from "./Doctor";
 
 @Entity()
 export class PrimaryDoctorHistory extends BaseEntity{
-    @PrimaryColumn({ type: "datetime" })
-    startDate!: Date;
+    @PrimaryColumn({ type: "bigint" })
+    startDate!: number;
 
     @ManyToOne(() => Patients)
-    @JoinColumn({ name: "PatientID" })
-    patient!: Patients;
+    @JoinColumn({ name: "patientID" })
+    patientID!: Patients;
 
     @ManyToOne(() => Doctors)
-    @JoinColumn({ name: "DoctorID" })
-    doctor!: Doctors;
+    @JoinColumn({ name: "doctorID" })
+    doctorID!: Doctors;
 
     @Column({ type: "varchar", length: 50 })
     doctorName!: string;
 
-    @Column({ type: "datetime", nullable: true })
-    endDate!: Date;
+    @Column({ type: "bigint", nullable: true })
+    endDate!: number;
 }

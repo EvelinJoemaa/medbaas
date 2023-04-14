@@ -7,8 +7,8 @@ export class Prescriptions extends BaseEntity{
     @PrimaryGeneratedColumn({ type: "int" })
     prescriptionID!: number;
 
-    @Column({ type: "datetime" })
-    datePrescribed!: Date;
+    @Column({ type: "bigint" })
+    datePrescribed!: number;
 
     @Column({ type: "int" })
     dosage!: number;
@@ -29,10 +29,10 @@ export class Prescriptions extends BaseEntity{
     reason!: string;
 
     @ManyToOne(() => Patients)
-    @JoinColumn({ name: "PatientID" })
-    patient!: Patients;
+    @JoinColumn({ name: "patientID" })
+    patientID!: Patients;
 
     @ManyToOne(() => Doctors)
-    @JoinColumn({ name: "DoctorID" })
-    doctor!: Doctors;
+    @JoinColumn({ name: "doctorID" })
+    doctorID!: Doctors;
 }

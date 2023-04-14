@@ -20,13 +20,13 @@ export class Patients extends BaseEntity{
     email!: string;
 
     @ManyToOne(() => Insurances)
-    @JoinColumn({ name: "InsuranceIFNumber" })
-    insurance!: Insurances;
+    @JoinColumn({ name: "insuranceID" })
+    insuranceID!: Insurances;
 
     @Column({ type: "int", nullable: true })
     insuranceHolderID!: number;
 
     @ManyToOne(() => Doctors)
-    @JoinColumn({ name: "DoctorID" })
-    doctor!: Doctors;
+    @JoinColumn({ name: "doctorID" })
+    doctorID!: Doctors;
 }
