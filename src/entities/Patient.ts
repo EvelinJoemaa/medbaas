@@ -29,4 +29,19 @@ export class Patients extends BaseEntity{
     @ManyToOne(() => Doctors)
     @JoinColumn({ name: "doctorID" })
     doctorID!: Doctors;
+
+    @OneToMany((type) => PrimaryDoctorHistory, (primarydoctorhistory)=> primarydoctorhistory.patient)
+    primarydoctorhistorys!: PrimaryDoctorHistory[];
+
+    @OneToMany((type) => Prescription, (prescription)=> prescription.patient)
+    prescriptions!: Prescription[];
+
+    @OneToMany((type) => OfficeVisit, (officevisit)=> officevisit.patient)
+    officevisits!: OfficeVisit[];
+
+    @ManyToOne((type) => Doctor, (Doctor)=> doctor.patient, {eager: true})
+    doctor!: Doctor;
+
+    @ManyToOne((type) => Insurance, (Insurance)=> insurance.patient, {eager: true})
+    dinsurance!: Insurance;
 }

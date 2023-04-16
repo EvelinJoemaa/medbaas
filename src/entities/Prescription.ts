@@ -35,4 +35,13 @@ export class Prescriptions extends BaseEntity{
     @ManyToOne(() => Doctors)
     @JoinColumn({ name: "doctorID" })
     doctorID!: Doctors;
+
+    @ManyToOne((type) => Drug, (drug)=> drug.prescription, {eager: true})
+    drug!: Drug;
+
+    @ManyToOne((type) => Patient, (patient)=> patient.prescription, {eager: true})
+    patient!: Patient;
+
+    @ManyToOne((type) => Doctor, (doctor)=> doctor.prescription, {eager: true})
+    doctor!: Doctor;
 }

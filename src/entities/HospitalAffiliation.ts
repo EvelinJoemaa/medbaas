@@ -10,4 +10,10 @@ export class HospitalAffiliations extends BaseEntity{
 
     @Column({ type: "int" })
     hospitalID!: number;
+
+    @ManyToOne((type) => Hospital, (Hospital)=> hospital.hospitalaffiliations, {eager: true})
+    hospital!: Hospital;
+
+    @ManyToOne((type) => Doctor, (Doctor)=> doctor.hospitalaffiliations, {eager: true})
+    doctor!: Doctor;
 }

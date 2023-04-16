@@ -8,4 +8,7 @@ export class Insurances extends BaseEntity{
 
     @Column({ type: "varchar", length: 50 })
     insuranceCompanyName!: string;
+
+    @OneToMany((type) => Patient, (patient)=> patient.insurance)
+    patients!: Patient[];
 }

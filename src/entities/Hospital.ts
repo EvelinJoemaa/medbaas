@@ -10,4 +10,7 @@ export class Hospitals extends BaseEntity{
 
     @Column({ type: "varchar", length: 50 })
     contactInformation!: string;
+
+    @OneToMany((type) => HospitalAffiliation, (hospitalaffiliation)=> hospitalaffiliation.hospital)
+    hospitalaffiliations!: HospitalAffiliation[];
 }

@@ -16,4 +16,7 @@ export class Drugs extends BaseEntity{
 
     @Column({ type: "varchar", length: 50 })
     sideEffects!: string;
+
+    @OneToMany((type) => Prescription, (prescription)=> prescription.drug)
+    prescriptions!: Prescription[];
 }

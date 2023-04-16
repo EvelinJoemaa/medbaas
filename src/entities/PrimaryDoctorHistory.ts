@@ -20,4 +20,10 @@ export class PrimaryDoctorHistory extends BaseEntity{
 
     @Column({ type: "bigint", nullable: true })
     endDate!: number;
+
+    @ManyToOne((type) => Doctor, (Doctor)=> doctor.primarydoctorhistorys, {eager: true})
+    doctor!: Doctor;
+
+    @ManyToOne((type) => Patient, (Patient)=> patient.primarydoctorhistorys, {eager: true})
+    patient!: Patient;
 }

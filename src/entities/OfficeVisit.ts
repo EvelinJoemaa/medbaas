@@ -39,4 +39,10 @@ export class OfficeVisits extends BaseEntity{
 
     @Column({ type: "varchar", length: 50, nullable: true })
     diagnosis!: string;
+    
+    @ManyToOne((type) => Doctor, (Doctor)=> doctor.officevisits, {eager: true})
+    doctor!: Doctor;
+
+    @ManyToOne((type) => Patient, (Patient)=> patient.officevisits, {eager: true})
+    patient!: Patient;
 }
