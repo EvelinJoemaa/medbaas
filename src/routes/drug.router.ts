@@ -1,5 +1,5 @@
 import express from "express";
-import { Drugs } from "../entities/Drug";
+import { Drug } from "../entities/Drug";
 import dataSource from "../datasource";
 
 const router = express.Router();
@@ -14,9 +14,9 @@ interface DrugParams {
 router.get("/", async (req, res) => {
     try {
         // küsi ravimit andmebaasist
-        const drugs = await dataSource.getRepository(Drugs).find();
+        const drugs = await dataSource.getRepository(Drug).find();
 
-        if (await Drugs.count() === 0) {
+        if (await Drug.count() === 0) {
             return res.status(404).json({ error: "No drugs currently exists!" });
         }
 
@@ -35,7 +35,7 @@ router.get("/:id", async (req, res) => {
         const { id }  = req.params;
 
         const drug = await dataSource
-            .getRepository(Drugs)
+            .getRepository(Drug)
             .findOneBy({ drugID: parseInt(id) });
 
         if (!drug) {
@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
         }
 
         // create new drug with given parameters
-        const drug = Drugs.create({
+        const drug = Drug.create({
             drugName: drugName.trim() ?? "",
             drugPurpose: drugPurpose.trim() ?? "",
             drugUse: drugUse.trim() ?? "",
@@ -71,7 +71,7 @@ router.post("/", async (req, res) => {
         });
 
         // save drug to database
-        const result = await dataSource.getRepository(Drugs).save(drug);
+        const result = await dataSource.getRepository(Drug).save(drug);
         return res.status(200).json({ data: result });
 
     } catch (error) {
@@ -88,7 +88,7 @@ router.put("/:id", async (req, res) => {
         const { drugName, drugPurpose, drugUse, sideEffects } = req.body as DrugParams;
 
         const drug = await dataSource
-            .getRepository(Drugs)
+            .getRepository(Drug)
             .findOneBy({ drugID: parseInt(id) });
 
         // validate & sanitize
@@ -124,17 +124,17 @@ router.delete("/:id", async(req, res) => {
         const { id } = req.params;
 
         const drug = await dataSource
-            .getRepository(Drugs)
+            .getRepository(Drug)
             .findOneBy({ drugID: parseInt(id) });
 
         if (!drug) {
             return res.status(404).json({ error: `DrugID: ${id} does not exist!` });
         }
 
-        const result = await Drugs.remove(drug);
+        const result = await Drug.remove(drug);
 
         // tagastame igaks juhuks kustutatud andmed
-        return res.status(200).json({ data: result });
+        return res.status(200).json({ data: req.params, result });
     } catch (error) {
         console.log("ERROR", { message: error });
 

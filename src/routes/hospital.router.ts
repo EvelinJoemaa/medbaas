@@ -1,5 +1,5 @@
 import express from "express";
-import { Hospitals } from "../entities/Hospital";
+import { Hospital } from "../entities/Hospital";
 import dataSource from "../datasource";
 
 const router = express.Router();
@@ -12,9 +12,9 @@ interface HospitalParams {
 router.get("/", async (req, res) => {
     try {
         // küsi haiglaid andmebaasist
-        const hospitals = await dataSource.getRepository(Hospitals).find();
+        const hospitals = await dataSource.getRepository(Hospital).find();
 
-        if (await Hospitals.count() === 0) {
+        if (await Hospital.count() === 0) {
             return res.status(404).json({ error: "No hospitals currently exists!" });
         }
 
@@ -33,7 +33,7 @@ router.get("/:id", async (req, res) => {
         const { id }  = req.params;
 
         const hospital = await dataSource
-            .getRepository(Hospitals)
+            .getRepository(Hospital)
             .findOneBy({ hospitalID: parseInt(id) });
 
         if (!hospital) {
@@ -61,13 +61,13 @@ router.post("/", async (req, res) => {
         }
 
         // create new hospital with given parameters
-        const hospital = Hospitals.create({
+        const hospital = Hospital.create({
             location: location.trim() ?? "",
             contactInformation: contactInformation.trim() ?? "",
         });
 
         // save hospital to database
-        const result = await dataSource.getRepository(Hospitals).save(hospital);
+        const result = await dataSource.getRepository(Hospital).save(hospital);
         return res.status(200).json({ data: result });
 
     } catch (error) {
@@ -84,7 +84,7 @@ router.put("/:id", async (req, res) => {
         const { location, contactInformation } = req.body as HospitalParams;
 
         const hospital = await dataSource
-            .getRepository(Hospitals)
+            .getRepository(Hospital)
             .findOneBy({ hospitalID: parseInt(id) });
 
         // validate & sanitize
@@ -118,14 +118,14 @@ router.delete("/:id", async(req, res) => {
         const { id } = req.params;
 
         const hospital = await dataSource
-            .getRepository(Hospitals)
+            .getRepository(Hospital)
             .findOneBy({ hospitalID: parseInt(id) });
 
         if (!hospital) {
             return res.status(404).json({ error: `HospitalID: ${id} does not exist!` });
         }
 
-        const result = await Hospitals.remove(hospital);
+        const result = await Hospital.remove(hospital);
 
         // tagastame igaks juhuks kustutatud andmed
         return res.status(200).json({ data: result });

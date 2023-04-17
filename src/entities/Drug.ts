@@ -1,7 +1,8 @@
-import {Entity, BaseEntity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Prescription } from "./Prescription";
 
 @Entity()
-export class Drugs extends BaseEntity{
+export class Drug extends BaseEntity{
     @PrimaryGeneratedColumn({ type: "int" })
     drugID!: number;
 

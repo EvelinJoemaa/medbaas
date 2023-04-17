@@ -1,9 +1,14 @@
-import {Entity, BaseEntity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Patient } from "./Patient";
+import { Prescription } from "./Prescription";
+import { OfficeVisit } from "./OfficeVisit";
+import { HospitalAffiliation } from "./HospitalAffiliation";
+import { PrimaryDoctorHistory } from "./PrimaryDoctorHistory";
 
 @Entity()
-export class Doctors extends BaseEntity{
+export class Doctor extends BaseEntity{
     @PrimaryGeneratedColumn({ type: "int" })
-    doctorID!: number;
+    Id!: number;
 
     @Column({ type: "varchar", length: 50 })
     specialty!: string;

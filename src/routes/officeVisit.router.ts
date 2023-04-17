@@ -1,5 +1,5 @@
 import express from "express";
-import { OfficeVisits} from "../entities/OfficeVisit";
+import { OfficeVisit} from "../entities/OfficeVisit";
 import dataSource from "../datasource";
 
 const router = express.Router();
@@ -20,9 +20,9 @@ interface OfficeVisitsParams {
 router.get("/", async (req, res) => {
     try {
         // küsi visiiti andmebaasist
-        const visits = await dataSource.getRepository(OfficeVisits).find();
+        const visits = await dataSource.getRepository(OfficeVisit).find();
 
-        if (await OfficeVisits.count() === 0) {
+        if (await OfficeVisit.count() === 0) {
             return res.status(404).json({ error: "No visits currently exists!" });
         }
 
@@ -41,7 +41,7 @@ router.get("/:patientID/:doctorID/:dateOfVisit", async (req, res) => {
         const { patientID, doctorID, dateOfVisit }  = req.params;
 
         const visit = await dataSource
-            .getRepository(OfficeVisits)
+            .getRepository(OfficeVisit)
             .findOneBy({ patientID: parseInt(patientID), doctorID: parseInt(doctorID), dateOfVisit: parseInt(dateOfVisit) });
 
         if (!visit) {
@@ -69,7 +69,7 @@ router.post("/", async (req, res) => {
         }
 
         // create new drug with given parameters
-        const visit = OfficeVisits.create({
+        const visit = OfficeVisit.create({
             patientID: patientID ?? 0,
             doctorID: doctorID ?? 0,
             dateOfVisit: dateOfVisit ?? 0,
@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
         });
 
         // save visit to database
-        const result = await dataSource.getRepository(OfficeVisits).save(visit);
+        const result = await dataSource.getRepository(OfficeVisit).save(visit);
         return res.status(200).json({ data: result });
 
     } catch (error) {
@@ -101,7 +101,7 @@ router.put("/:patientID/:doctorID/:dateOfVisit", async (req, res) => {
         const { symptoms, initialDiagnosis, diagnosisStatus, bloodPressure, weight, height, diagnosis } = req.body as OfficeVisitsParams;
 
         const visit = await dataSource
-            .getRepository(OfficeVisits)
+            .getRepository(OfficeVisit)
             .findOneBy({ patientID: parseInt(patientID), doctorID: parseInt(doctorID), dateOfVisit: parseInt(dateOfVisit) });
 
         // validate & sanitize
@@ -135,14 +135,14 @@ router.delete("/:patientID/:doctorID/:dateOfVisit", async(req, res) => {
         const { patientID, doctorID, dateOfVisit } = req.params;
 
         const visit = await dataSource
-            .getRepository(OfficeVisits)
+            .getRepository(OfficeVisit)
             .findOneBy({ patientID: parseInt(patientID), doctorID: parseInt(doctorID), dateOfVisit: parseInt(dateOfVisit) });
 
         if (!visit) {
             return res.status(404).json({ error: `VisitID: ${patientID + doctorID + dateOfVisit} does not exist!` });
         }
 
-        const result = await OfficeVisits.remove(visit);
+        const result = await OfficeVisit.remove(visit);
 
         // tagastame igaks juhuks kustutatud andmed
         return res.status(200).json({ data: req.params, result });

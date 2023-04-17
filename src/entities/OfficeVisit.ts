@@ -1,20 +1,20 @@
 import {Entity, BaseEntity, PrimaryColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {Patients} from "./Patient";
-import {Doctors} from "./Doctor";
+import { Patient } from "./Patient";
+import { Doctor } from "./Doctor";
 
 @Entity()
-export class OfficeVisits extends BaseEntity{
+export class OfficeVisit extends BaseEntity{
     @PrimaryColumn({ type: "int" })
     patientID!: number;
-    @ManyToOne(() => Patients)
+    @ManyToOne(() => Patient)
     @JoinColumn({ name: "patientID" })
-    patient!: Patients;
+    patient!: Patient;
 
     @PrimaryColumn({ type: "int" })
     doctorID!: number;
-    @ManyToOne(() => Doctors)
-    @JoinColumn({ name: "doctorID" })
-    doctor!: Doctors;
+    @ManyToOne(() => Doctor)
+    @JoinColumn({ name: "Id" })
+    doctor!: Doctor;
 
     @PrimaryColumn({ type: "bigint" })
     dateOfVisit!: number;
@@ -39,10 +39,10 @@ export class OfficeVisits extends BaseEntity{
 
     @Column({ type: "varchar", length: 50, nullable: true })
     diagnosis!: string;
-    
-    @ManyToOne((type) => Doctor, (Doctor)=> doctor.officevisits, {eager: true})
-    doctor!: Doctor;
 
-    @ManyToOne((type) => Patient, (Patient)=> patient.officevisits, {eager: true})
-    patient!: Patient;
+    // @ManyToOne((type) => Doctor, (Doctor)=> Doctor.officevisits, {eager: true})
+    // doctor!: Doctor;
+    //
+    // @ManyToOne((type) => Patient, (Patient)=> Patient.officevisits, {eager: true})
+    // patient!: Patient;
 }

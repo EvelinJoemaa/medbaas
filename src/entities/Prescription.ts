@@ -1,9 +1,10 @@
 import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {Patients} from "./Patient";
-import {Doctors} from "./Doctor";
+import { Patient } from "./Patient";
+import { Doctor } from "./Doctor";
+import { Drug } from "./Drug";
 
 @Entity()
-export class Prescriptions extends BaseEntity{
+export class Prescription extends BaseEntity{
     @PrimaryGeneratedColumn({ type: "int" })
     prescriptionID!: number;
 
@@ -28,20 +29,20 @@ export class Prescriptions extends BaseEntity{
     @Column({ type: "varchar", length: 50, nullable: true })
     reason!: string;
 
-    @ManyToOne(() => Patients)
+    @ManyToOne(() => Patient)
     @JoinColumn({ name: "patientID" })
-    patientID!: Patients;
+    patientID!: Patient;
 
-    @ManyToOne(() => Doctors)
-    @JoinColumn({ name: "doctorID" })
-    doctorID!: Doctors;
+    @ManyToOne(() => Doctor)
+    @JoinColumn({ name: "Id" })
+    Id!: Doctor;
 
-    @ManyToOne((type) => Drug, (drug)=> drug.prescription, {eager: true})
+    @ManyToOne((type) => Drug, (drug)=> drug.prescriptions, {eager: true})
     drug!: Drug;
 
-    @ManyToOne((type) => Patient, (patient)=> patient.prescription, {eager: true})
+    @ManyToOne((type) => Patient, (patient)=> patient.prescriptions, {eager: true})
     patient!: Patient;
 
-    @ManyToOne((type) => Doctor, (doctor)=> doctor.prescription, {eager: true})
+    @ManyToOne((type) => Doctor, (doctor)=> doctor.prescriptions, {eager: true})
     doctor!: Doctor;
 }

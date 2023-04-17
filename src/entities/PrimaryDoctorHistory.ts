@@ -1,19 +1,19 @@
 import {Entity, BaseEntity, PrimaryColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {Patients} from "./Patient";
-import {Doctors} from "./Doctor";
+import { Patient } from "./Patient";
+import { Doctor } from "./Doctor";
 
 @Entity()
 export class PrimaryDoctorHistory extends BaseEntity{
     @PrimaryColumn({ type: "bigint" })
     startDate!: number;
 
-    @ManyToOne(() => Patients)
+    @ManyToOne(() => Patient)
     @JoinColumn({ name: "patientID" })
-    patientID!: Patients;
+    patientID!: Patient;
 
-    @ManyToOne(() => Doctors)
-    @JoinColumn({ name: "doctorID" })
-    doctorID!: Doctors;
+    @ManyToOne(() => Doctor)
+    @JoinColumn({ name: "Id" })
+    Id!: Doctor;
 
     @Column({ type: "varchar", length: 50 })
     doctorName!: string;
@@ -21,9 +21,9 @@ export class PrimaryDoctorHistory extends BaseEntity{
     @Column({ type: "bigint", nullable: true })
     endDate!: number;
 
-    @ManyToOne((type) => Doctor, (Doctor)=> doctor.primarydoctorhistorys, {eager: true})
+    @ManyToOne((type) => Doctor, (Doctor)=> Doctor.primarydoctorhistorys, {eager: true})
     doctor!: Doctor;
 
-    @ManyToOne((type) => Patient, (Patient)=> patient.primarydoctorhistorys, {eager: true})
+    @ManyToOne((type) => Patient, (Patient)=> Patient.primarydoctorhistorys, {eager: true})
     patient!: Patient;
 }

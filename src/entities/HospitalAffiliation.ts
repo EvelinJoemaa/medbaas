@@ -1,19 +1,21 @@
-import {Entity, BaseEntity, Column, PrimaryColumn} from "typeorm";
+import { Entity, BaseEntity, Column, PrimaryColumn, ManyToOne } from "typeorm";
+import { Doctor } from "./Doctor";
+import { Hospital } from "./Hospital";
 
 @Entity()
-export class HospitalAffiliations extends BaseEntity{
+export class HospitalAffiliation extends BaseEntity{
     @PrimaryColumn({ type: "bigint" })
     dateOfAffiliation!: number;
 
     @Column({ type: "int" })
-    doctorID!: number;
+    Id!: number;
 
     @Column({ type: "int" })
     hospitalID!: number;
 
-    @ManyToOne((type) => Hospital, (Hospital)=> hospital.hospitalaffiliations, {eager: true})
+    @ManyToOne((type) => Hospital, (Hospital)=> Hospital.hospitalaffiliations, {eager: true})
     hospital!: Hospital;
 
-    @ManyToOne((type) => Doctor, (Doctor)=> doctor.hospitalaffiliations, {eager: true})
+    @ManyToOne((type) => Doctor, (Doctor)=> Doctor.hospitalaffiliations, {eager: true})
     doctor!: Doctor;
 }

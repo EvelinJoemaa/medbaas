@@ -1,9 +1,12 @@
-import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {Insurances} from "./Insurance";
-import {Doctors} from "./Doctor";
+import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn} from "typeorm";
+import { Insurance } from "./Insurance";
+import { Doctor } from "./Doctor";
+import { PrimaryDoctorHistory } from "./PrimaryDoctorHistory";
+import { Prescription } from "./Prescription";
+import { OfficeVisit } from "./OfficeVisit";
 
 @Entity()
-export class Patients extends BaseEntity{
+export class Patient extends BaseEntity{
     @PrimaryGeneratedColumn({ type: "int" })
     patientID!: number;
 
@@ -19,16 +22,16 @@ export class Patients extends BaseEntity{
     @Column({ type: "varchar", length: 50, nullable: true })
     email!: string;
 
-    @ManyToOne(() => Insurances)
-    @JoinColumn({ name: "insuranceID" })
-    insuranceID!: Insurances;
+    // @ManyToOne(() => Insurance)
+    // @JoinColumn({ name: "insuranceID" })
+    // insuranceID!: Insurance;
 
     @Column({ type: "int", nullable: true })
     insuranceHolderID!: number;
 
-    @ManyToOne(() => Doctors)
-    @JoinColumn({ name: "doctorID" })
-    doctorID!: Doctors;
+    // @ManyToOne(() => Doctor)
+    // @JoinColumn({ name: "doctorID" })
+    // doctorID!: Doctor;
 
     @OneToMany((type) => PrimaryDoctorHistory, (primarydoctorhistory)=> primarydoctorhistory.patient)
     primarydoctorhistorys!: PrimaryDoctorHistory[];
@@ -39,9 +42,9 @@ export class Patients extends BaseEntity{
     @OneToMany((type) => OfficeVisit, (officevisit)=> officevisit.patient)
     officevisits!: OfficeVisit[];
 
-    @ManyToOne((type) => Doctor, (Doctor)=> doctor.patient, {eager: true})
+    @ManyToOne((type) => Doctor, (Doctor)=> Doctor.patients, {eager: true})
     doctor!: Doctor;
 
-    @ManyToOne((type) => Insurance, (Insurance)=> insurance.patient, {eager: true})
-    dinsurance!: Insurance;
+    @ManyToOne((type) => Insurance, (Insurance)=> Insurance.patients, {eager: true})
+    insurance!: Insurance;
 }

@@ -1,5 +1,5 @@
 import express from "express";
-import { Insurances } from "../entities/Insurance";
+import { Insurance } from "../entities/Insurance";
 import dataSource from "../datasource";
 
 const router = express.Router();
@@ -8,9 +8,9 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     try {
         // küsi kindlustused andmebaasist
-        const insurances = await dataSource.getRepository(Insurances).find();
+        const insurances = await dataSource.getRepository(Insurance).find();
 
-        if (await Insurances.count() === 0) {
+        if (await Insurance.count() === 0) {
             return res.status(404).json({ error: "No insurances currently exists!" });
         }
 
@@ -30,7 +30,7 @@ router.get("/:id", async (req, res) => {
         const { id }  = req.params;
 
         const insurance = await dataSource
-            .getRepository(Insurances)
+            .getRepository(Insurance)
             .findOneBy({ insuranceID: parseInt(id) });
 
         if (!insurance) {
@@ -59,10 +59,10 @@ router.post("/", async (req, res) => {
         }
 
         // create new insurance company with given parameters
-        const insurance = dataSource.getRepository(Insurances).create(req.body);
+        const insurance = dataSource.getRepository(Insurance).create(req.body);
 
         // save insurance to database
-        const result = await dataSource.getRepository(Insurances).save(insurance);
+        const result = await dataSource.getRepository(Insurance).save(insurance);
         return res.status(200).json({ data: result });
 
     } catch (error) {
@@ -80,7 +80,7 @@ router.put("/:id", async (req, res) => {
         const { insuranceCompanyName } = req.body;
 
         const insurance = await dataSource
-            .getRepository(Insurances)
+            .getRepository(Insurance)
             .findOneBy({ insuranceID: parseInt(id) });
 
         // validate & sanitize
@@ -94,10 +94,10 @@ router.put("/:id", async (req, res) => {
                 .json({ error: "Insurance company has to have a valid name!" });
         }
 
-        dataSource.getRepository(Insurances).merge(insurance, req.body);
+        dataSource.getRepository(Insurance).merge(insurance, req.body);
 
         //salvestame muudatused andmebaasi
-        const result = await dataSource.getRepository(Insurances).save(insurance);
+        const result = await dataSource.getRepository(Insurance).save(insurance);
 
         // saadame vastu uuendatud andmed (kui midagi töödeldakse serveris on seda vaja kuvada)
         return res.status(200).json({ data: result });
@@ -115,17 +115,17 @@ router.delete("/:id", async(req, res) => {
         const { id } = req.params;
 
         const insurance = await dataSource
-            .getRepository(Insurances)
+            .getRepository(Insurance)
             .findOneBy({ insuranceID: parseInt(id) });
 
         if (!insurance) {
             return res.status(404).json({ error: `InsuranceID: ${id} does not exist!` });
         }
 
-        const result = await dataSource.getRepository(Insurances).remove(insurance);
+        const result = await dataSource.getRepository(Insurance).remove(insurance);
 
         // tagastame igaks juhuks kustutatud andmed
-        return res.status(200).json({ data: result });
+        return res.status(200).json({ data: req.params, result });
     } catch (error) {
         console.log("ERROR", { message: error });
 

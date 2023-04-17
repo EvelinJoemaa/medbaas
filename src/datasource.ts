@@ -1,13 +1,13 @@
 import { DataSource } from "typeorm";
 import { config } from "./config";
-import { Doctors } from "./entities/Doctor";
-import { Drugs } from "./entities/Drug";
-import { Hospitals } from "./entities/Hospital";
-import { HospitalAffiliations } from "./entities/HospitalAffiliation";
-import { Insurances } from "./entities/Insurance";
-import { OfficeVisits } from "./entities/OfficeVisit";
-import { Patients } from "./entities/Patient";
-import { Prescriptions } from "./entities/Prescription";
+import { Doctor } from "./entities/Doctor";
+import { Drug } from "./entities/Drug";
+import { Hospital } from "./entities/Hospital";
+import { HospitalAffiliation } from "./entities/HospitalAffiliation";
+import { Insurance } from "./entities/Insurance";
+import { OfficeVisit } from "./entities/OfficeVisit";
+import { Patient } from "./entities/Patient";
+import { Prescription } from "./entities/Prescription";
 import { PrimaryDoctorHistory} from "./entities/PrimaryDoctorHistory";
 
 // andmebaasiühenduse konfguratsioon
@@ -18,7 +18,7 @@ const defaultDataSource = new DataSource({
     username: config.database.username,
     password: config.database.password,
     database: config.database.db,
-    entities: [Doctors, Drugs, Hospitals, HospitalAffiliations, Insurances, OfficeVisits, Patients, Prescriptions, PrimaryDoctorHistory],
+    entities: [Doctor, Drug, Hospital, HospitalAffiliation, Insurance, OfficeVisit, Patient, Prescription, PrimaryDoctorHistory],
     synchronize: true,
 });
 
