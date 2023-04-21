@@ -1,16 +1,17 @@
 import {util} from 'config';
 import {join} from 'path';
-export interface Config{
+
+export interface Config {
     server: serverConfig;
     database: databaseConfig;
 }
 
-export interface serverConfig{
+export interface serverConfig {
     port: number;
     host: string;
 }
 
-export interface databaseConfig{
+export interface databaseConfig {
     port: number;
     host: string;
     db: string;

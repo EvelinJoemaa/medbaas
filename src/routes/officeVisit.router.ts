@@ -5,8 +5,8 @@ import dataSource from "../datasource";
 const router = express.Router();
 
 interface OfficeVisitsParams {
-    patientID: number;
-    doctorID: number;
+    patientId: number;
+    doctorId: number;
     dateOfVisit: number;
     symptoms?: string;
     initialDiagnosis?: string;
@@ -42,7 +42,11 @@ router.get("/:patientID/:doctorID/:dateOfVisit", async (req, res) => {
 
         const visit = await dataSource
             .getRepository(OfficeVisit)
-            .findOneBy({ patientID: parseInt(patientID), doctorID: parseInt(doctorID), dateOfVisit: parseInt(dateOfVisit) });
+            .findOneBy({
+                patientId: parseInt(patientID),
+                doctorId: parseInt(doctorID),
+                dateOfVisit: parseInt(dateOfVisit)
+            });
 
         if (!visit) {
             return res.status(404).json({ message: `VisitID: ${patientID + doctorID + dateOfVisit} does not exist!` });
@@ -59,19 +63,30 @@ router.get("/:patientID/:doctorID/:dateOfVisit", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const { patientID, doctorID, dateOfVisit, symptoms, initialDiagnosis, diagnosisStatus, bloodPressure, weight, height, diagnosis,  } = req.body as OfficeVisitsParams;
+        const {
+            patientId,
+            doctorId,
+            dateOfVisit,
+            symptoms,
+            initialDiagnosis,
+            diagnosisStatus,
+            bloodPressure,
+            weight,
+            height,
+            diagnosis,
+        } = req.body as OfficeVisitsParams;
 
         // validate & sanitize
-        if (!patientID || !doctorID || !dateOfVisit) {
+        if (!patientId || !doctorId || !dateOfVisit) {
             return res
                 .status(400)
-                .json({ error: "Office visit has to have a valid patientID, doctorID and date of visit!" });
+                .json({error: "Office visit has to have a valid patientID, doctorID and date of visit!"});
         }
 
         // create new drug with given parameters
         const visit = OfficeVisit.create({
-            patientID: patientID ?? 0,
-            doctorID: doctorID ?? 0,
+            patientId: patientId ?? 0,
+            doctorId: doctorId ?? 0,
             dateOfVisit: dateOfVisit ?? 0,
             symptoms: symptoms?.trim() ?? "",
             initialDiagnosis: initialDiagnosis?.trim() ?? "",
@@ -102,7 +117,11 @@ router.put("/:patientID/:doctorID/:dateOfVisit", async (req, res) => {
 
         const visit = await dataSource
             .getRepository(OfficeVisit)
-            .findOneBy({ patientID: parseInt(patientID), doctorID: parseInt(doctorID), dateOfVisit: parseInt(dateOfVisit) });
+            .findOneBy({
+                patientId: parseInt(patientID),
+                doctorId: parseInt(doctorID),
+                dateOfVisit: parseInt(dateOfVisit)
+            });
 
         // validate & sanitize
         if (!visit) {
@@ -136,7 +155,11 @@ router.delete("/:patientID/:doctorID/:dateOfVisit", async(req, res) => {
 
         const visit = await dataSource
             .getRepository(OfficeVisit)
-            .findOneBy({ patientID: parseInt(patientID), doctorID: parseInt(doctorID), dateOfVisit: parseInt(dateOfVisit) });
+            .findOneBy({
+                patientId: parseInt(patientID),
+                doctorId: parseInt(doctorID),
+                dateOfVisit: parseInt(dateOfVisit)
+            });
 
         if (!visit) {
             return res.status(404).json({ error: `VisitID: ${patientID + doctorID + dateOfVisit} does not exist!` });

@@ -1,17 +1,17 @@
-import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { HospitalAffiliation } from "./HospitalAffiliation";
+import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import {HospitalAffiliation} from "./HospitalAffiliation";
 
 @Entity()
-export class Hospital extends BaseEntity{
-    @PrimaryGeneratedColumn({ type: "int" })
-    hospitalID!: number;
+export class Hospital extends BaseEntity {
+    @PrimaryGeneratedColumn({type: "int"})
+    Id!: number;
 
-    @Column({ type: "varchar", length: 50 })
+    @Column({type: "varchar", length: 50})
     location!: string;
 
-    @Column({ type: "varchar", length: 50 })
+    @Column({type: "varchar", length: 50})
     contactInformation!: string;
 
-    @OneToMany((type) => HospitalAffiliation, (hospitalaffiliation)=> hospitalaffiliation.hospital)
-    hospitalaffiliations!: HospitalAffiliation[];
+    @OneToMany(() => HospitalAffiliation, hospitalAffiliation => hospitalAffiliation.hospital)
+    hospitalAffiliations!: HospitalAffiliation[];
 }

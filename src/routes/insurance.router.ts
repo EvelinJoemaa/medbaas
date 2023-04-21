@@ -31,7 +31,7 @@ router.get("/:id", async (req, res) => {
 
         const insurance = await dataSource
             .getRepository(Insurance)
-            .findOneBy({ insuranceID: parseInt(id) });
+            .findOneBy({Id: parseInt(id)});
 
         if (!insurance) {
             return res.status(404).json({ message: `InsuranceID: ${id} does not exist!` });
@@ -81,7 +81,7 @@ router.put("/:id", async (req, res) => {
 
         const insurance = await dataSource
             .getRepository(Insurance)
-            .findOneBy({ insuranceID: parseInt(id) });
+            .findOneBy({Id: parseInt(id)});
 
         // validate & sanitize
         if (!insurance) {
@@ -116,7 +116,7 @@ router.delete("/:id", async(req, res) => {
 
         const insurance = await dataSource
             .getRepository(Insurance)
-            .findOneBy({ insuranceID: parseInt(id) });
+            .findOneBy({Id: parseInt(id)});
 
         if (!insurance) {
             return res.status(404).json({ error: `InsuranceID: ${id} does not exist!` });

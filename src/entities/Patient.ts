@@ -1,50 +1,42 @@
-import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn} from "typeorm";
-import { Insurance } from "./Insurance";
-import { Doctor } from "./Doctor";
-import { PrimaryDoctorHistory } from "./PrimaryDoctorHistory";
-import { Prescription } from "./Prescription";
-import { OfficeVisit } from "./OfficeVisit";
+import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from "typeorm";
+import {Insurance} from "./Insurance";
+import {Doctor} from "./Doctor";
+import {PrimaryDoctorHistory} from "./PrimaryDoctorHistory";
+import {Prescription} from "./Prescription";
+import {OfficeVisit} from "./OfficeVisit";
 
 @Entity()
-export class Patient extends BaseEntity{
-    @PrimaryGeneratedColumn({ type: "int" })
-    patientID!: number;
+export class Patient extends BaseEntity {
+    @PrimaryGeneratedColumn({type: "int"})
+    Id!: number;
 
-    @Column({ type: "varchar", length: 50 })
+    @Column({type: "varchar", length: 50})
     name!: string;
 
-    @Column({ type: "varchar", length: 50 })
+    @Column({type: "varchar", length: 50})
     address!: string;
 
-    @Column({ type: "int" })
+    @Column({type: "bigint"})
     phoneNumber!: number;
 
-    @Column({ type: "varchar", length: 50, nullable: true })
-    email!: string;
+    @Column({type: "varchar", length: 50, nullable: true})
+    email!: string | undefined;
 
-    // @ManyToOne(() => Insurance)
-    // @JoinColumn({ name: "insuranceID" })
-    // insuranceID!: Insurance;
+    @Column({type: "int", nullable: true})
+    insuranceHolderId!: number | undefined;
 
-    @Column({ type: "int", nullable: true })
-    insuranceHolderID!: number;
+    @ManyToOne(() => Insurance, insurance => insurance.patients)
+    insurance!: Insurance;
 
-    // @ManyToOne(() => Doctor)
-    // @JoinColumn({ name: "doctorID" })
-    // doctorID!: Doctor;
-
-    @OneToMany((type) => PrimaryDoctorHistory, (primarydoctorhistory)=> primarydoctorhistory.patient)
-    primarydoctorhistorys!: PrimaryDoctorHistory[];
-
-    @OneToMany((type) => Prescription, (prescription)=> prescription.patient)
-    prescriptions!: Prescription[];
-
-    @OneToMany((type) => OfficeVisit, (officevisit)=> officevisit.patient)
-    officevisits!: OfficeVisit[];
-
-    @ManyToOne((type) => Doctor, (Doctor)=> Doctor.patients, {eager: true})
+    @ManyToOne(() => Doctor, doctor => doctor.patients)
     doctor!: Doctor;
 
-    @ManyToOne((type) => Insurance, (Insurance)=> Insurance.patients, {eager: true})
-    insurance!: Insurance;
+    @OneToMany(() => PrimaryDoctorHistory, primaryDoctorHistory => primaryDoctorHistory.patient)
+    primaryDoctorHistories!: PrimaryDoctorHistory[];
+
+    @OneToMany(() => Prescription, prescription => prescription.patient)
+    prescriptions!: Prescription[];
+
+    @OneToMany(() => OfficeVisit, officeVisit => officeVisit.patientId)
+    officeVisits!: OfficeVisit[];
 }

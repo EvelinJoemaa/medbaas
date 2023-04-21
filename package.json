@@ -1,4 +1,6 @@
 {
+  "name": "medical_database",
+  "version": "1.0.0",
   "scripts": {
     "build": "tsc",
     "serve": "tsc && node dist/server.js",

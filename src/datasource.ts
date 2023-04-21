@@ -1,14 +1,14 @@
-import { DataSource } from "typeorm";
-import { config } from "./config";
-import { Doctor } from "./entities/Doctor";
-import { Drug } from "./entities/Drug";
-import { Hospital } from "./entities/Hospital";
-import { HospitalAffiliation } from "./entities/HospitalAffiliation";
-import { Insurance } from "./entities/Insurance";
-import { OfficeVisit } from "./entities/OfficeVisit";
-import { Patient } from "./entities/Patient";
-import { Prescription } from "./entities/Prescription";
-import { PrimaryDoctorHistory} from "./entities/PrimaryDoctorHistory";
+import {DataSource} from "typeorm";
+import {config} from "./config";
+import {Doctor} from "./entities/Doctor";
+import {Drug} from "./entities/Drug";
+import {Hospital} from "./entities/Hospital";
+import {HospitalAffiliation} from "./entities/HospitalAffiliation";
+import {Insurance} from "./entities/Insurance";
+import {OfficeVisit} from "./entities/OfficeVisit";
+import {Patient} from "./entities/Patient";
+import {Prescription} from "./entities/Prescription";
+import {PrimaryDoctorHistory} from "./entities/PrimaryDoctorHistory";
 
 // andmebaasiühenduse konfguratsioon
 const defaultDataSource = new DataSource({

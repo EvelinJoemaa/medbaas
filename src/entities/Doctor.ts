@@ -19,21 +19,21 @@ export class Doctor extends BaseEntity{
     @Column({ type: "int" })
     phoneNumber!: number;
 
-    @Column({ type: "varchar" })
+    @Column({type: "varchar"})
     address!: string;
 
-    @OneToMany((type) => Patient, (patient)=> patient.doctor)
+    @OneToMany(() => Patient, patient => patient.doctor)
     patients!: Patient[];
 
-    @OneToMany((type) => Prescription, (prescription)=> prescription.doctor)
+    @OneToMany(() => Prescription, prescription => prescription.doctor)
     prescriptions!: Prescription[];
 
-    @OneToMany((type) => OfficeVisit, (officevisit)=> officevisit.doctor)
-    officevisits!: OfficeVisit[];
+    @OneToMany(() => OfficeVisit, officeVisit => officeVisit.doctorId)
+    officeVisits!: OfficeVisit[];
 
-    @OneToMany((type) => HospitalAffiliation, (hospitalaffiliation)=> hospitalaffiliation.doctor)
-    hospitalaffiliations!: HospitalAffiliation[];
+    @OneToMany(() => HospitalAffiliation, hospitalAffiliation => hospitalAffiliation.doctor)
+    hospitalAffiliations!: HospitalAffiliation[];
 
-    @OneToMany((type) => PrimaryDoctorHistory, (primarydoctorhistory)=> primarydoctorhistory.doctor)
-    primarydoctorhistorys!: PrimaryDoctorHistory[];
+    @OneToMany(() => PrimaryDoctorHistory, primaryDoctorHistory => primaryDoctorHistory.doctor)
+    primaryDoctorHistories!: PrimaryDoctorHistory[];
 }

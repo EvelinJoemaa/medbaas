@@ -34,7 +34,7 @@ router.get("/:id", async (req, res) => {
 
         const hospital = await dataSource
             .getRepository(Hospital)
-            .findOneBy({ hospitalID: parseInt(id) });
+            .findOneBy({Id: parseInt(id)});
 
         if (!hospital) {
             return res.status(404).json({ message: `HospitalID: ${id} does not exist!` });
@@ -85,7 +85,7 @@ router.put("/:id", async (req, res) => {
 
         const hospital = await dataSource
             .getRepository(Hospital)
-            .findOneBy({ hospitalID: parseInt(id) });
+            .findOneBy({Id: parseInt(id)});
 
         // validate & sanitize
         if (!hospital) {
@@ -119,7 +119,7 @@ router.delete("/:id", async(req, res) => {
 
         const hospital = await dataSource
             .getRepository(Hospital)
-            .findOneBy({ hospitalID: parseInt(id) });
+            .findOneBy({Id: parseInt(id)});
 
         if (!hospital) {
             return res.status(404).json({ error: `HospitalID: ${id} does not exist!` });

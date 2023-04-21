@@ -1,6 +1,6 @@
 import express from "express";
-import { Doctor } from "../entities/Doctor";
 import dataSource from "../datasource";
+import {Doctor} from "../entities/Doctor";
 
 const router = express.Router();
 
@@ -22,6 +22,7 @@ router.get("/", async (req, res) => {
 
         // vasta arstide kogumikuga JSON formaadis
         return res.status(200).json({ data: doctors });
+
     } catch (error) {
         console.log("ERROR", { message: error });
 
