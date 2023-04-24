@@ -25,10 +25,16 @@ export class Patient extends BaseEntity {
     @Column({type: "int", nullable: true})
     insuranceHolderId!: number | undefined;
 
-    @ManyToOne(() => Insurance, insurance => insurance.patients)
+    @ManyToOne(() => Insurance, insurance => insurance.patients, {
+        onDelete: "CASCADE",
+        cascade: true
+    })
     insurance!: Insurance;
 
-    @ManyToOne(() => Doctor, doctor => doctor.patients)
+    @ManyToOne(() => Doctor, doctor => doctor.patients, {
+        onDelete: "CASCADE",
+        cascade: true
+    })
     doctor!: Doctor;
 
     @OneToMany(() => PrimaryDoctorHistory, primaryDoctorHistory => primaryDoctorHistory.patient)

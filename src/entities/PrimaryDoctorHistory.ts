@@ -13,9 +13,19 @@ export class PrimaryDoctorHistory extends BaseEntity {
     @Column({type: "bigint", nullable: true})
     endDate!: number | undefined;
 
-    @ManyToOne(() => Patient, (Patient) => Patient.primaryDoctorHistories, {eager: true})
-    patient!: number;
+    @ManyToOne(() => Patient, (Patient) => Patient.primaryDoctorHistories, {
+        eager: true,
+        onDelete: "CASCADE",
+        cascade: true
+    })
+    patient!: Patient
+    //patient!: number | undefined;
 
-    @ManyToOne(() => Doctor, (Doctor) => Doctor.primaryDoctorHistories, {eager: true})
-    doctor!: number;
+    @ManyToOne(() => Doctor, (Doctor) => Doctor.primaryDoctorHistories, {
+        eager: true,
+        onDelete: "CASCADE",
+        cascade: true
+    })
+    doctor!: Doctor
+    //doctor!: number | undefined;
 }

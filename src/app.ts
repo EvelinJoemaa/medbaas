@@ -11,8 +11,14 @@ import primaryDoctorHistoryRouter from "./routes/primaryDoctorHistory.router";
 
 const app = express();
 
+// Add Swagger UI
+const swaggerUi = require('swagger-ui-express');
+const yamlJs = require('yamljs');
+const swaggerDocument = yamlJs.load('./swagger.yml');
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 app.use("/api/doctors", doctorsRouter);
 app.use("/api/drugs", drugsRouter);

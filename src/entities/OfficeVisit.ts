@@ -9,13 +9,21 @@ export class OfficeVisit extends BaseEntity {
 
     @PrimaryColumn({type: "int"})
     patientId!: number;
-    @ManyToOne(() => Patient, patient => patient.officeVisits)
+    @ManyToOne(() => Patient, patient => patient.officeVisits, {
+        onDelete: "CASCADE",
+        cascade: true
+    })
     @JoinColumn({name: "patientId"})
+    patient!: Patient;
 
     @PrimaryColumn({type: "int"})
     doctorId!: number;
-    @ManyToOne(() => Doctor, doctor => doctor.officeVisits)
+    @ManyToOne(() => Doctor, doctor => doctor.officeVisits, {
+        onDelete: "CASCADE",
+        cascade: true
+    })
     @JoinColumn({name: "doctorId"})
+    doctor!: Doctor;
 
     @Column({type: "varchar", length: 50, nullable: true})
     symptoms!: string;

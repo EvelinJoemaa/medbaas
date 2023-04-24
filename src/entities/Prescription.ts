@@ -29,12 +29,23 @@ export class Prescription extends BaseEntity {
     @Column({type: "varchar", length: 50, nullable: true})
     reason!: string | undefined;
 
-    @ManyToOne(() => Patient, (Patient) => Patient.prescriptions, {eager: true})
+    @ManyToOne(() => Patient, (Patient) => Patient.prescriptions, {
+        eager: true,
+        cascade: true
+    })
     patient!: Patient;
 
-    @ManyToOne(() => Drug, (Drug) => Drug.prescriptions, {eager: true})
+    @ManyToOne(() => Drug, (Drug) => Drug.prescriptions, {
+        eager: true,
+        onDelete: "CASCADE",
+        cascade: true
+    })
     drug!: Drug;
 
-    @ManyToOne(() => Doctor, (Doctor) => Doctor.prescriptions, {eager: true})
+    @ManyToOne(() => Doctor, (Doctor) => Doctor.prescriptions, {
+        eager: true,
+        onDelete: "CASCADE",
+        cascade: true
+    })
     doctor!: Doctor;
 }

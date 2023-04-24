@@ -7,9 +7,15 @@ export class HospitalAffiliation extends BaseEntity {
     @PrimaryColumn({type: "bigint"})
     dateOfAffiliation!: number;
 
-    @ManyToOne(() => Doctor, doctor => doctor.hospitalAffiliations)
+    @ManyToOne(() => Doctor, doctor => doctor.hospitalAffiliations, {
+        onDelete: "CASCADE",
+        cascade: true
+    })
     doctor!: Doctor;
 
-    @ManyToOne(() => Hospital, hospital => hospital.hospitalAffiliations)
+    @ManyToOne(() => Hospital, hospital => hospital.hospitalAffiliations, {
+        onDelete: "CASCADE",
+        cascade: true
+    })
     hospital!: Hospital;
 }

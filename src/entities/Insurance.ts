@@ -1,5 +1,5 @@
-import { PrimaryGeneratedColumn, Column, Entity, BaseEntity, OneToMany } from "typeorm";
-import { Patient } from "./Patient";
+import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import {Patient} from "./Patient";
 
 @Entity()
 export class Insurance extends BaseEntity {

@@ -1,0 +1,764 @@
+openapi: 3.0.2
+info:
+  title: Medical Database
+  version: 1.0.0
+  description: health_one_medical_database
+  termsOfService: 'http://swagger.io/terms/'
+paths:
+  /doctors:
+    get:
+      tags:
+        - /doctors
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                doctor:
+                  value:
+                    Id: 1
+                    specialty: Hambaarst
+                    hospitals: 2
+                    phoneNumber: 57743229
+                    address: Pärna 8
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                doctor:
+                  value: 'error: "No doctors currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                doctor:
+                  value: 'message: "Could not fetch doctors!"'
+          description: Internal Server Error
+      summary: Get all doctors
+      description: Gets all the doctors from the database.
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/doctor'
+            examples:
+              doctor:
+                value:
+                  specialty: hambaarst
+                  hospitals: 1
+                  phoneNumber: 56654334
+                  address: Pärna 8
+        required: true
+      tags:
+        - /doctors
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                doctor:
+                  value:
+                    specialty: kirurg
+                    hospitals: 1
+                    phoneNumber: 56654334
+                    address: Pärna 8
+                    Id: 3
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                doctor:
+                  value: >-
+                    error: "Doctor has to have a valid specialty, hospitals, phone number
+                    and address!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                doctor:
+                  value: 'message: "Could not fetch doctors!"'
+          description: Internal Server Error
+      summary: Add a doctor
+  '/doctors/{id}':
+    get:
+      tags:
+        - /doctors
+    put:
+      tags:
+        - /doctors
+    delete:
+      tags:
+        - /doctors
+  /drugs:
+    get:
+      tags:
+        - /drugs
+    post:
+      tags:
+        - /drugs
+  /hospitals:
+    get:
+      tags:
+        - /hospitals
+    post:
+      tags:
+        - /hospitals
+  /hospitalAffiliations:
+    get:
+      tags:
+        - /hospitalAffiliations
+    post:
+      tags:
+        - /hospitalAffiliations
+  /insurances:
+    get:
+      tags:
+        - /insurances
+    post:
+      tags:
+        - /insurances
+  /officeVisits:
+    get:
+      tags:
+        - /officeVisits
+    post:
+      tags:
+        - /officeVisits
+  /patients:
+    get:
+      tags:
+        - /patients
+    post:
+      tags:
+        - /patients
+  /prescriptions:
+    get:
+      tags:
+        - /prescriptions
+    post:
+      tags:
+        - /prescriptions
+  /primaryDoctorHistory:
+    get:
+      tags:
+        - /primaryDoctorHistory
+    post:
+      tags:
+        - /primaryDoctorHistory
+  '/drugs/{id}':
+    get:
+      tags:
+        - /drugs
+    put:
+      tags:
+        - /drugs
+    delete:
+      tags:
+        - /drugs
+  '/hospitals/{id}':
+    get:
+      tags:
+        - /hospitals
+    put:
+      tags:
+        - /hospitals
+    delete:
+      tags:
+        - /hospitals
+  '/hospitalAffiliations/{date}':
+    get:
+      tags:
+        - /hospitalAffiliations
+    put:
+      tags:
+        - /hospitalAffiliations
+    delete:
+      tags:
+        - /hospitalAffiliations
+  '/insurances/{id}':
+    get:
+      tags:
+        - /insurances
+    put:
+      tags:
+        - /insurances
+    delete:
+      tags:
+        - /insurances
+  '/patients/{id}':
+    get:
+      tags:
+        - /patients
+    put:
+      tags:
+        - /patients
+    delete:
+      tags:
+        - /patients
+  '/prescriptions/{id}':
+    get:
+      tags:
+        - /prescriptions
+    put:
+      tags:
+        - /prescriptions
+    delete:
+      tags:
+        - /prescriptions
+  '/officeVisits/:patientId/:doctorId/:dateOfVisit':
+    get:
+      tags:
+        - /officeVisits
+    put:
+      tags:
+        - /officeVisits
+    delete:
+      tags:
+        - /officeVisits
+  '/primaryDoctorHistory/{id}':
+    get:
+      tags:
+        - /primaryDoctorHistory
+    put:
+      tags:
+        - /primaryDoctorHistory
+    delete:
+      tags:
+        - /primaryDoctorHistory
+components:
+  schemas:
+    doctor:
+      title: Root Type for doctor
+      description: ''
+      required:
+        - address
+        - specialty
+        - hospitals
+        - Id
+        - phoneNumber
+      type: object
+      properties:
+        Id:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "Id": 1
+            }
+        specialty:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "specialty": "hambaarst"
+            }
+        hospitals:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "hospitals": 2
+            }
+        phoneNumber:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "phoneNumber": 57791345
+            }
+        address:
+          maxLength: 255
+          type: string
+          example: |-
+            {
+                "address": "Pärna 8"
+            }
+      example:
+        Id: 1
+        specialty: Hambaarst
+        hospitals: 2
+        phoneNumber: 54482009
+        address: Pärna 5
+    drug:
+      title: Root Type for drug
+      description: ''
+      required:
+        - drugName
+        - drugPurpose
+        - drugUse
+        - sideEffects
+        - Id
+      type: object
+      properties:
+        Id:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "Id": 1
+            }
+        drugName:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "drugName": "name"
+            }
+        drugPurpose:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "drugPurpose": "painkiller"
+            }
+        drugUse:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "drugUse": "eat"
+            }
+        sideEffects:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "sideEffects": "none"
+            }
+      example:
+        Id: 1
+        drugName: drugName
+        drugPurpose: painkiller
+        drugUse: eat
+        sideEffects: none
+    hospital:
+      title: Root Type for hospital
+      description: ''
+      required:
+        - Id
+        - contactInformation
+        - location
+      type: object
+      properties:
+        Id:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "Id": 1
+            }
+        location:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "location": "Pärna 8"
+            }
+        contactInformation:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "contactInformation": "hospital@hospital.com"
+            }
+      example:
+        Id: 1
+        location: Pärna 5
+        contactInformation: hospital@hospital.ee
+    hospital_affiliation:
+      title: Root Type for hospital_affiliation
+      description: ''
+      required:
+        - dateOfAffiliation
+        - doctorId
+        - hospitalId
+      type: object
+      properties:
+        dateOfAffiliation:
+          maximum: 19
+          type: integer
+          example: |-
+            {
+                "dateOfAffiliation": 202323041234
+            }
+        doctorId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "doctorId": 1
+            }
+        hospitalId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "hospitalId": 1
+            }
+      example:
+        dateOfAffiliation: 202323041221
+        doctorId: 1
+        hospitalId: 2
+    insurance:
+      title: Root Type for insurance
+      description: ''
+      required:
+        - Id
+        - insuranceCompanyName
+      type: object
+      properties:
+        Id:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "Id": 1
+            }
+        insuranceCompanyName:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "insuranceCompanyName": "Good Insurance"
+            }
+      example:
+        Id: 1
+        insuranceCompanyName: Curio Insurance
+    office_visit:
+      title: Root Type for office_visit
+      description: ''
+      required:
+        - patientId
+        - doctorId
+        - dateOfVisit
+      type: object
+      properties:
+        dateOfVisit:
+          maximum: 19
+          type: integer
+          example: |-
+            {
+                "dateOfVisit": 202323041245
+            }
+        patientId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "patientId": 1
+            }
+        doctorId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "doctorId": 1
+            }
+        symptoms:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "symptoms": "none"
+            }
+        initialDiagnosis:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "initaialDiagnosis": "none"
+            }
+        diagnosisStatus:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "diagnosisStatus": "none"
+            }
+        bloodPressure:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "bloodPressure": 18060
+            }
+        weight:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "weight": 90
+            }
+        height:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "height": 190
+            }
+        diagnosis:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "diagnosis": "Haige"
+            }
+      example:
+        dateOfVisit: '202323041225'
+        patientId: 5
+        doctorId: 1
+        symptoms: none
+        initialDiagnosis: none
+        diagnosisStatus: none
+        bloodPressure: 13080
+        weight: 90
+        height: 190
+        diagnosis: none
+    patient:
+      title: Root Type for patient
+      description: ''
+      required:
+        - address
+        - doctorId
+        - Id
+        - insuranceId
+        - name
+        - phoneNumber
+      type: object
+      properties:
+        Id:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "Id": 1
+            }
+        name:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "name": "Kati Karu"
+            }
+        address:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "address": "Pärna 5"
+            }
+        phoneNumber:
+          maximum: 19
+          type: integer
+          example: |-
+            {
+                "phoneNumber": 45578921
+            }
+        email:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "email": "example@example.com"
+            }
+        insuranceHolderId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "insuranceHolderId": 1
+            }
+        insuranceId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "insuranceId": 1
+            }
+        doctorId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "doctorId": 1
+            }
+      example:
+        Id: 1
+        name: Kati Karu
+        address: Järva Jaani 19
+        phoneNumber: '566709834'
+        email: gdfg@gmail.com
+        insuranceId: 1
+        doctorId: 1
+    prescription:
+      title: Root Type for prescription
+      description: ''
+      required:
+        - datePrescribed
+        - doctorId
+        - dosage
+        - drugId
+        - duration
+        - Id
+        - patientId
+        - refillable
+      type: object
+      properties:
+        Id:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "Id": 1
+            }
+        datePrescribed:
+          maximum: 19
+          type: integer
+          example: |-
+            {
+                "datePrescribed": 202323041250
+            }
+        dosage:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "dosage": 8
+            }
+        duration:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "duration": 3
+            }
+        refillable:
+          type: boolean
+          example: |-
+            {
+                "refillable": true
+            }
+        numberOfRefills:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "numberOfRefills": 2
+            }
+        refillSize:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "refillSize": 2
+            }
+        reason:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "reason": "Oli vaja"
+            }
+        patientId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "patientId": 1
+            }
+        doctorId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "doctorId": 1
+            }
+        drugId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "drugId": 1
+            }
+      example:
+        Id: 2
+        datePrescribed: '202321041803'
+        dosage: 10
+        duration: 2
+        refillable: true
+        numberOfRefills: 4
+        refillSize: 2
+        reason: Raviks
+        patientId: 1
+        doctorId: 1
+        drugId: 1
+    primary_doctor_history:
+      title: Root Type for primary_doctor_history
+      description: ''
+      required:
+        - doctorId
+        - doctorName
+        - startDate
+        - patientId
+      type: object
+      properties:
+        startDate:
+          maximum: 19
+          type: integer
+          example: |-
+            {
+                "startDate": 202323041223
+            }
+        doctorName:
+          maxLength: 50
+          type: string
+          example: |-
+            {
+                "doctorName": "Kati Karu"
+            }
+        endDate:
+          maxLength: 19
+          type: string
+          example: |-
+            {
+                "endDate": 202323041250
+            }
+        patientId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "patientId": 1
+            }
+        doctorId:
+          maximum: 10
+          type: integer
+          example: |-
+            {
+                "doctorId": 1
+            }
+      example: |-
+        {
+            "startDate": 202323041223,
+            "doctorName": "Kati Karu",
+            "patientId": 1,
+            "doctorId": 2
+            "endDate": null
+        }

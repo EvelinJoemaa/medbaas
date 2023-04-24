@@ -18,6 +18,8 @@
     "reflect-metadata": "^0.1.13",
     "ts-node": "^10.9.1",
     "typeorm": "^0.3.12",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "swagger-ui-express": "^4.6.2",
+    "yamljs": "^0.3.0"
   }
 }

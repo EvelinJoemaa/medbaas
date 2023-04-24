@@ -1,63 +1,82 @@
 import express from "express";
-import { Hospital } from "../entities/Hospital";
 import dataSource from "../datasource";
+import {Hospital} from "../entities/Hospital";
 
 const router = express.Router();
 
-interface HospitalParams {
+interface CreateHospitalParams {
     location: string;
     contactInformation: string;
 }
 
+interface UpdateHospitalParams {
+    location?: string;
+    contactInformation?: string;
+}
+
+// get all hospitals
 router.get("/", async (req, res) => {
     try {
-        // küsi haiglaid andmebaasist
+        // fetch all hospitals from database
         const hospitals = await dataSource.getRepository(Hospital).find();
 
+        // validate if there are any hospitals
         if (await Hospital.count() === 0) {
-            return res.status(404).json({ error: "No hospitals currently exists!" });
+            return res.status(404).json({error: "No hospitals currently exists!"});
         }
 
-        // vasta haiglate kogumikuga JSON formaadis
-        return res.status(200).json({ data: hospitals });
-    } catch (error) {
-        console.log("ERROR", { message: error });
+        // return all hospitals in json format
+        return res.status(200).json({data: hospitals});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not fetch hospitals!" });
+    } catch (error) {
+        console.log("ERROR", {message: error});
+
+        // return error if something unexpected happens during database query
+        return res.status(500).json({message: "Could not fetch hospitals!"});
     }
 });
 
+// get specific hospital
 router.get("/:id", async (req, res) => {
     try {
-        const { id }  = req.params;
+        // get hospital id from request parameters
+        const {id} = req.params;
 
+        // ask specific hospital from database
         const hospital = await dataSource
             .getRepository(Hospital)
             .findOneBy({Id: parseInt(id)});
 
+        // validate
         if (!hospital) {
-            return res.status(404).json({ message: `HospitalID: ${id} does not exist!` });
+            return res.status(404).json({message: `HospitalId: ${id} does not exist!`});
         }
 
-        return res.status(200).json({ data: hospital });
-    } catch (error) {
-        console.log("ERROR", { message: error });
+        // return hospital in JSON format
+        return res.status(200).json({data: hospital});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not fetch hospitals!" });
+    } catch (error) {
+        console.log("ERROR", {message: error});
+
+        // return error if something unexpected happens during database query
+        return res.status(500).json({message: "Could not fetch hospital!"});
     }
 });
 
+// create new hospital
 router.post("/", async (req, res) => {
     try {
-        const { location, contactInformation } = req.body as HospitalParams;
+        // get hospital parameters from request body
+        const {
+            location,
+            contactInformation
+        } = req.body as CreateHospitalParams;
 
         // validate & sanitize
         if (!location.trim() || !contactInformation.trim()) {
             return res
                 .status(400)
-                .json({ error: "Hospital has to have a valid location and contact information!" });
+                .json({error: "Hospital has to have a valid location and contact information!"});
         }
 
         // create new hospital with given parameters
@@ -68,72 +87,90 @@ router.post("/", async (req, res) => {
 
         // save hospital to database
         const result = await dataSource.getRepository(Hospital).save(hospital);
-        return res.status(200).json({ data: result });
+
+        // return created hospital in JSON format
+        return res.status(200).json({data: result});
 
     } catch (error) {
-        console.log("ERROR", { message: error });
+        console.log("ERROR", {message: error});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not fetch hospitals!" });
+        // return error if something unexpected happens during database query
+        return res.status(500).json({message: "Could not create new hospital!"});
     }
 });
 
+// update specific hospital
 router.put("/:id", async (req, res) => {
     try {
-        const { id } = req.params;
-        const { location, contactInformation } = req.body as HospitalParams;
+        // get hospital id from request parameters
+        const {id} = req.params;
 
+        // get hospital parameters from request body
+        const {
+            location,
+            contactInformation
+        } = req.body as UpdateHospitalParams;
+
+        // ask specific hospital from database
         const hospital = await dataSource
             .getRepository(Hospital)
             .findOneBy({Id: parseInt(id)});
 
         // validate & sanitize
         if (!hospital) {
-            return res.status(404).json({ error: `HospitalID: ${id} does not exist!` });
+            return res.status(404).json({error: `HospitalId: ${id} does not exist!`});
         }
-        if (!location.trim() || !contactInformation.trim()) {
+        if (location?.trim() === "" || contactInformation?.trim() === "") {
             return res
                 .status(400)
-                .json({ error: "Hospital has to have a valid location and contact information!" });
+                .json({error: "Hospital has to have a valid location and contact information!"});
         }
 
-        hospital.location = location ? location : hospital.location;
-        hospital.contactInformation = contactInformation ? contactInformation : hospital.contactInformation;
+        // update hospital parameters
+        hospital.location = location ? location.trim() : hospital.location;
+        hospital.contactInformation = contactInformation ? contactInformation.trim() : hospital.contactInformation;
 
-        //salvestame muudatused andmebaasi
+        // save hospital to database
         const result = await hospital.save();
 
-        // saadame vastu uuendatud andmed (kui midagi töödeldakse serveris on seda vaja kuvada)
-        return res.status(200).json({ data: result });
-    } catch (error) {
-        console.log("ERROR", { message: error });
+        // return updated hospital in JSON format
+        return res.status(200).json({data: result});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not update hospitals!" });
+    } catch (error) {
+        console.log("ERROR", {message: error});
+
+        // return error if something unexpected happens during database query
+        return res.status(500).json({message: "Could not update hospital!"});
     }
 });
 
-router.delete("/:id", async(req, res) => {
+// delete specific hospital
+router.delete("/:id", async (req, res) => {
     try {
-        const { id } = req.params;
+        // get hospital id from request parameters
+        const {id} = req.params;
 
+        // ask specific hospital from database
         const hospital = await dataSource
             .getRepository(Hospital)
             .findOneBy({Id: parseInt(id)});
 
+        // validate
         if (!hospital) {
-            return res.status(404).json({ error: `HospitalID: ${id} does not exist!` });
+            return res.status(404).json({error: `HospitalId: ${id} does not exist!`});
         }
 
+        // remove hospital from database
         const result = await Hospital.remove(hospital);
 
-        // tagastame igaks juhuks kustutatud andmed
-        return res.status(200).json({ data: result });
-    } catch (error) {
-        console.log("ERROR", { message: error });
+        // return deleted hospital in JSON format
+        return res.status(200).json({data: req.params, result});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not update hospitals!" });
+    } catch (error) {
+        console.log("ERROR", {message: error});
+
+        // return error if something unexpected happens during database query
+        return res.status(500).json({message: "Could not delete hospital!"});
     }
 });
 

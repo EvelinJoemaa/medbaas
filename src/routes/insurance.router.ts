@@ -1,136 +1,168 @@
 import express from "express";
-import { Insurance } from "../entities/Insurance";
 import dataSource from "../datasource";
+import {Insurance} from "../entities/Insurance";
 
 const router = express.Router();
 
-// GET - info päring (kõik kindlustused)
+interface CreateInsuranceParams {
+    insuranceCompanyName: string;
+}
+
+interface UpdateInsuranceParams {
+    insuranceCompanyName?: string;
+}
+
+// get all insurances
 router.get("/", async (req, res) => {
     try {
-        // küsi kindlustused andmebaasist
+        // find all insurances
         const insurances = await dataSource.getRepository(Insurance).find();
 
+        // validate if insurances exists
         if (await Insurance.count() === 0) {
-            return res.status(404).json({ error: "No insurances currently exists!" });
+            return res.status(404).json({error: "No insurances currently exists!"});
         }
 
-        // vasta kindlustuste kogumikuga JSON formaadis
-        return res.status(200).json({ data: insurances });
-    } catch (error) {
-        console.log("ERROR", { message: error });
+        // return insurances in json format
+        return res.status(200).json({data: insurances});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not fetch insurances!" });
+    } catch (error) {
+        console.log("ERROR", {message: error});
+
+        // return system error if unexpected error occurs during database query
+        return res.status(500).json({message: "Could not fetch insurances!"});
     }
 });
 
-// GET - info päring (üksik kindlustus)
+// get specific insurance
 router.get("/:id", async (req, res) => {
     try {
-        const { id }  = req.params;
+        // get insurance id from request parameters
+        const {id} = req.params;
 
+        // get insurance from database
         const insurance = await dataSource
             .getRepository(Insurance)
             .findOneBy({Id: parseInt(id)});
 
+        // validate if insurance exists
         if (!insurance) {
-            return res.status(404).json({ message: `InsuranceID: ${id} does not exist!` });
+            return res.status(404).json({message: `InsuranceId: ${id} does not exist!`});
         }
 
-        return res.status(200).json({ data: insurance });
-    } catch (error) {
-        console.log("ERROR", { message: error });
+        // return insurance in json format
+        return res.status(200).json({data: insurance});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not fetch insurances!" });
+    } catch (error) {
+        console.log("ERROR", {message: error});
+
+        // return system error if unexpected error occurs during database query
+        return res.status(500).json({message: "Could not fetch insurance!"});
     }
 });
 
-// POST - saadab kindlustuse infot
+// create new insurance
 router.post("/", async (req, res) => {
     try {
-        const { insuranceCompanyName } = req.body;
+        // get insurance parameters from request body
+        const {insuranceCompanyName} = req.body as CreateInsuranceParams;
 
         // validate & sanitize
         if (!insuranceCompanyName.trim()) {
             return res
                 .status(400)
-                .json({ error: "Insurance company has to have a valid name!" });
+                .json({error: "Insurance company has to have a valid name!"});
         }
 
         // create new insurance company with given parameters
-        const insurance = dataSource.getRepository(Insurance).create(req.body);
+        const insurance = Insurance.create({
+            insuranceCompanyName: insuranceCompanyName.trim() ?? ""
+        });
 
         // save insurance to database
         const result = await dataSource.getRepository(Insurance).save(insurance);
-        return res.status(200).json({ data: result });
+
+        // return insurance in json format
+        return res.status(200).json({data: result});
 
     } catch (error) {
-        console.log("ERROR", { message: error });
+        console.log("ERROR", {message: error});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not fetch insurances!" });
+        // return system error if unexpected error occurs during database query
+        return res.status(500).json({message: "Could not create new insurance!"});
     }
 });
 
-// PUT - uuendab kindlustuse infot
+// update specific insurance
 router.put("/:id", async (req, res) => {
     try {
-        const { id } = req.params;
-        const { insuranceCompanyName } = req.body;
+        // get insurance id from request parameters
+        const {id} = req.params;
 
+        // get insurance parameters from request body
+        const {insuranceCompanyName} = req.body as UpdateInsuranceParams;
+
+        // get insurance from database
         const insurance = await dataSource
             .getRepository(Insurance)
             .findOneBy({Id: parseInt(id)});
 
-        // validate & sanitize
+        // validate
         if (!insurance) {
-            return res.status(404).json({ error: `InsuranceID: ${id} does not exist!` });
+            return res.status(404).json({error: `InsuranceId: ${id} does not exist!`});
         }
 
-        if (!insuranceCompanyName.trim()) {
+        // validate & sanitize
+        if (!insuranceCompanyName?.trim()) {
             return res
                 .status(400)
-                .json({ error: "Insurance company has to have a valid name!" });
+                .json({error: "Insurance company has to have a valid name!"});
         }
 
-        dataSource.getRepository(Insurance).merge(insurance, req.body);
+        // update insurance with given parameters
+        insurance.insuranceCompanyName = insuranceCompanyName.trim() ?? "";
 
-        //salvestame muudatused andmebaasi
+        // save insurance to database
         const result = await dataSource.getRepository(Insurance).save(insurance);
 
-        // saadame vastu uuendatud andmed (kui midagi töödeldakse serveris on seda vaja kuvada)
-        return res.status(200).json({ data: result });
-    } catch (error) {
-        console.log("ERROR", { message: error });
+        // return insurance in json format
+        return res.status(200).json({data: result});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not update insurances!" });
+    } catch (error) {
+        console.log("ERROR", {message: error});
+
+        // return system error if unexpected error occurs during database query
+        return res.status(500).json({message: "Could not update insurance!"});
     }
 });
 
-// DELETE - kustutamine
-router.delete("/:id", async(req, res) => {
+// delete specific insurance
+router.delete("/:id", async (req, res) => {
     try {
-        const { id } = req.params;
+        // get insurance id from request parameters
+        const {id} = req.params;
 
+        // get insurance from database
         const insurance = await dataSource
             .getRepository(Insurance)
             .findOneBy({Id: parseInt(id)});
 
+        // validate
         if (!insurance) {
-            return res.status(404).json({ error: `InsuranceID: ${id} does not exist!` });
+            return res.status(404).json({error: `InsuranceId: ${id} does not exist!`});
         }
 
+        // delete insurance from database
         const result = await dataSource.getRepository(Insurance).remove(insurance);
 
-        // tagastame igaks juhuks kustutatud andmed
-        return res.status(200).json({ data: req.params, result });
-    } catch (error) {
-        console.log("ERROR", { message: error });
+        // return insurance in json format
+        return res.status(200).json({data: req.params, result});
 
-        // vasta süsteemi veaga kui andmebaasipäringu jooksul ootamatu viga tekib
-        return res.status(500).json({ message: "Could not update insurances!" });
+    } catch (error) {
+        console.log("ERROR", {message: error});
+
+        // return system error if unexpected error occurs during database query
+        return res.status(500).json({message: "Could not delete insurance!"});
     }
 });
 
