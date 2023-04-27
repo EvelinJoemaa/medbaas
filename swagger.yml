@@ -29,9 +29,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/doctor'
-              examples:
+              example:
                 doctor:
-                  value: 'error: "No doctors currently exists!"'
+                value: 'error: "No doctors currently exists!"'
           description: Not Found
         '500':
           content:
@@ -53,9 +53,10 @@ paths:
             examples:
               doctor:
                 value:
-                  specialty: hambaarst
-                  hospitals: 1
-                  phoneNumber: 56654334
+                  Id: 1
+                  specialty: Hambaarst
+                  hospitals: 2
+                  phoneNumber: 57743229
                   address: Pärna 8
         required: true
       tags:
@@ -96,156 +97,1806 @@ paths:
                   value: 'message: "Could not fetch doctors!"'
           description: Internal Server Error
       summary: Add a doctor
-  '/doctors/{id}':
+
+
+  /doctors/{id}:
     get:
       tags:
         - /doctors
+      parameters:
+        - name: id
+          in: path
+          description: ID of the doctor that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                doctor:
+                  value:
+                    Id: 1
+                    specialty: Hambaarst
+                    hospitals: 2
+                    phoneNumber: 57743229
+                    address: Pärna 8
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              example:
+                doctor:
+                value: 'error: "No doctors currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                doctor:
+                  value: 'message: "Could not fetch doctors!"'
+          description: Internal Server Error
+      summary: Get the doctor by ID
+      description: Gets the requested doctor from the database.
+
     put:
       tags:
         - /doctors
+      summary: Update an existing doctor
+      description: Update an existing doctor by Id
+      operationId: updateDoctor
+      requestBody:
+        description: Update an existent Doctor in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/doctor'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/doctor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/doctor'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the doctor that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/doctor'
+        '400':
+          description: Doctor does not exist!
+        '404':
+          description: Doctor has to have a valid specialty, hospitals, phone number and address!
+        '500':
+          description: Could not update doctor!
+
     delete:
       tags:
         - /doctors
+      summary: Delete doctor by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deleteDoctor
+      parameters:
+        - name: id
+          in: path
+          description: ID of the doctor that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Doctor succesfully deleted
+        '404':
+          description: Doctor does not exist
+        '500':
+          description: Could not delete doctor
+
   /drugs:
     get:
       tags:
         - /drugs
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+              examples:
+                drug:
+                  value:
+                    Id: 1
+                    drugPurpose: painkiller
+                    drugUse: eat
+                    sideEffects: none
+                    drugName: name
+          description: Drug found
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+              examples:
+                drug:
+                  value: 'error: "No drugs currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+              examples:
+                drug:
+                  value: 'message: "Could not fetch drugs!"'
+          description: Internal Server Error
+      summary: Get all drugs
+      description: Gets all the drugs from the database.
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/drug'
+            examples:
+              drug:
+                value:
+                  Id: 1
+                  drugPurpose: painkiller
+                  drugUse: eat
+                  sideEffects: none
+                  drugName: name
+        required: true
       tags:
         - /drugs
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+              examples:
+                drug:
+                  value:
+                    Id: 1
+                    drugPurpose: painkiller
+                    drugUse: eat
+                    sideEffects: none
+                    drugName: name
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+              examples:
+                drug:
+                  value: >-
+                    error: "Drug has to have a valid name, purpose, use and side effects!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/doctor'
+              examples:
+                drug:
+                  value: 'message: "Could not fetch drugs!"'
+          description: Internal Server Error
+      summary: Add a drug
+
+
+  /drugs/{id}:
+    get:
+      tags:
+        - /drugs
+      parameters:
+        - name: id
+          in: path
+          description: ID of the drug that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+              examples:
+                drug:
+                  value:
+                    Id: 1
+                    drugPurpose: painkiller
+                    drugUse: eat
+                    sideEffects: none
+                    drugName: name
+          description: Drug found
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+              examples:
+                doctor:
+                  value: 'error: "Drug does not exist!"'
+          description: Drug not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+              examples:
+                drug:
+                  value: 'message: "Could not fetch drug!"'
+          description: Internal Server Error
+      summary: Get the drug by ID
+      description: Gets the requested drug from the database.
+
+    put:
+      tags:
+        - /drugs
+      summary: Update an existing drug
+      description: Update an existing drug by Id
+      operationId: updateDrug
+      requestBody:
+        description: Update an existent drug in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/drug'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/drug'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/drug'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the drug that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drug'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/drug'
+        '400':
+          description: Drug does not exist!
+        '404':
+          description: Drug has to have a valid name, purpose, use and side effects!
+        '500':
+          description: Could not update drug!
+
+    delete:
+      tags:
+        - /drugs
+      summary: Delete drug by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deleteDrug
+      parameters:
+        - name: id
+          in: path
+          description: ID of the drug that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Drug succesfully deleted
+        '404':
+          description: Drug does not exist
+        '500':
+          description: Could not delete drug
+
+
   /hospitals:
     get:
       tags:
         - /hospitals
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                hospital:
+                  value:
+                    Id: 1
+                    location: Pärna 8
+                    contactInformation: hospital@hospital.com
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                hospital:
+                  value: 'error: "No hospitals currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                hospital:
+                  value: 'message: "Could not fetch hospitals!"'
+          description: Internal Server Error
+      summary: Get all hospitals
+    description: Gets all the hospitals from the database.
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hospital'
+            examples:
+              hospital:
+                value:
+                  Id: 1
+                  location: Pärna 8
+                  contactInformation: hospital@hospital.com
+        required: true
       tags:
         - /hospitals
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                hospital:
+                  value:
+                    Id: 1
+                    location: Pärna 8
+                    contactInformation: hospital@hospital.com
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                hospital:
+                  value: >-
+                    error: "Hospital has to have a valid location and contact information!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                hospital:
+                  value: 'message: "Could not fetch hospitals!"'
+          description: Internal Server Error
+      summary: Add a hospital
+
+
+  /hospitals/{id}:
+    get:
+      tags:
+        - /hospitals
+      parameters:
+        - name: id
+          in: path
+          description: ID of the hospital that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                hospital:
+                  value:
+                    Id: 1
+                    location: Pärna 8
+                    contactInformation: hospital@hospital.com
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                doctor:
+                  value: 'error: "Hospital does not exist!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+              examples:
+                hospital:
+                  value: 'message: "Could not fetch hospital!"'
+          description: Internal Server Error
+      summary: Get the hospital by ID
+      description: Gets the requested hospital from the database.
+
+    put:
+      tags:
+        - /hospitals
+      summary: Update an existing hospital
+      description: Update an existing hospital by Id
+      operationId: updateHospital
+      requestBody:
+        description: Update an existent hospital in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hospital'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/hospital'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/hospital'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the hospital that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/hospital'
+        '400':
+          description: Hospital does not exist!
+        '404':
+          description: Hhspitalrug has to have a valid location and contact information!
+        '500':
+          description: Could not update hospital!
+    delete:
+      tags:
+        - /hospitals
+      summary: Delete hospital by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deleteHospital
+      parameters:
+        - name: id
+          in: path
+          description: ID of the hospital that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Hospital succesfully deleted
+        '404':
+          description: Hopital does not exist
+        '500':
+          description: Could not delete hospital
+
   /hospitalAffiliations:
     get:
       tags:
         - /hospitalAffiliations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                hospitalAffiliation:
+                  value:
+                    dateOfAffiliation: 202323041234
+                    doctorId: 1
+                    hospitalId: 1
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                hospitalAffiliation:
+                  value: 'error: "No hospital affiliations currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                hospitalAffiliation:
+                  value: 'message: "Could not fetch hospital affiliations!"'
+          description: Internal Server Error
+      summary: Get all hospital affiliations
+    description: Gets all the hospital affiliations from the database.
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hospital_affiliation'
+            examples:
+              hospitalAffiliation:
+                value:
+                  dateOfAffiliation: 202323041234
+                  doctorId: 1
+                  hospitalId: 1
+        required: true
       tags:
         - /hospitalAffiliations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                hospitalAffiliation:
+                  value:
+                    dateOfAffiliation: 202323041234
+                    doctorId: 1
+                    hospitalId: 1
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                hospitalAffiliation:
+                  value: >-
+                    error: "Hospital has to have a valid date, doctorID and hospitalID!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                hospitalAffiliation:
+                  value: 'message: "Could not fetch affiliation!"'
+          description: Internal Server Error
+      summary: Add an affiliation
+
+
+  /hospitalAffiliations/{date}:
+    get:
+      tags:
+        - /hospitalAffiliations
+      parameters:
+        - name: date
+          in: path
+          description: ID of the affiliation that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                hospitalAffiliation:
+                  value:
+                    dateOfAffiliation: 202323041234
+                    doctorId: 1
+                    hospitalId: 1
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                doctor:
+                  value: 'error: "Hospital affiliaton does not exist!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+              examples:
+                hospitalAffiliation:
+                  value: 'message: "Could not fetch affiliation!"'
+          description: Internal Server Error
+      summary: Get the affiliation  by ID
+      description: Gets the requested affiliation from the database.
+
+    put:
+      tags:
+        - /hospitalAffiliations
+      summary: Update an existing affiliation
+      description: Update an existing affiliation by Id
+      operationId: updateHospitalAffiliation
+      requestBody:
+        description: Update an existent affiliation in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/hospital_affiliation'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/hospital_affiliation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/hospital_affiliation'
+        required: true
+      parameters:
+        - name: date
+          in: path
+          description: ID of the affiliation that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/hospital_affiliation'
+        '400':
+          description: Affiliation does not exist!
+        '404':
+          description: Affiliation has to have a valid date, doctorId and hospitalId!
+        '500':
+          description: Could not update affiliation!
+    delete:
+      tags:
+        - /hospitalAffiliations
+      summary: Delete affiliation by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deleteHospitalAffiliation
+      parameters:
+        - name: date
+          in: path
+          description: ID of the affiliation that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Affiliation succesfully deleted
+        '404':
+          description: Affiliation does not exist
+        '500':
+          description: Could not delete affiliation
+
+
   /insurances:
     get:
       tags:
         - /insurances
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value:
+                    Id: 1
+                    insuranceCompanyName: Good Insurance
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value: 'error: "No insurances currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value: 'message: "Could not fetch insurances!"'
+          description: Internal Server Error
+      summary: Get all insurances
+    description: Gets all the insurances from the database.
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/insurance'
+            examples:
+              insurance:
+                value:
+                  Id: 1
+                  insuranceCompanyName: Good Insurance
+        required: true
       tags:
         - /insurances
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value:
+                    Id: 1
+                    insuranceCompanyName: Good Insurance
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value: >-
+                    error: "Insurance company has to have a valid name!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value: 'message: "Could not fetch insurances!"'
+          description: Internal Server Error
+      summary: Add an insurance
+
+
+  /insurances/{id}:
+    get:
+      tags:
+        - /insurances
+      parameters:
+        - name: id
+          in: path
+          description: ID of the insurance that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value:
+                    Id: 1
+                    insuranceCompanyName: Good Insurance
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value: 'error: "Insurance does not exist!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+              examples:
+                insurance:
+                  value: 'message: "Could not fetch insurance!"'
+          description: Internal Server Error
+      summary: Get the insurance by name
+      description: Gets the requested insurance from the database.
+
+    put:
+      tags:
+        - /insurances
+      summary: Update an existing insurance
+      description: Update an existing insurance by name
+      operationId: updateInsurance
+      requestBody:
+        description: Update an existent insurance in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/insurance'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/insurance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/insurance'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the insurance that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/insurance'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/insurance'
+        '400':
+          description: Insurance does not exist!
+        '404':
+          description: Insurance company has to have a valid name!
+        '500':
+          description: Could not update insurance!
+    delete:
+      tags:
+        - /insurances
+      summary: Delete insurance by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deleteInsurance
+      parameters:
+        - name: id
+          in: path
+          description: ID of the insurance that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Insurance succesfully deleted
+        '404':
+          description: Insurance does not exist
+        '500':
+          description: Could not delete insurance
+
+
   /officeVisits:
     get:
       tags:
         - /officeVisits
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value:
+                    dateOfVisit: '202323041225'
+                    patientId: 5
+                    doctorId: 1
+                    symptoms: none
+                    initialDiagnosis: none
+                    diagnosisStatus: none
+                    bloodPressure: 13080
+                    weight: 90
+                    height: 190
+                    diagnosis: none
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value: 'error: "No visits currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value: 'message: "Could not fetch visits!"'
+          description: Internal Server Error
+      summary: Get all visits
+    description: Gets all the visits from the database.
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/office_visit'
+            examples:
+              officeVisit:
+                value:
+                  dateOfVisit: '202323041225'
+                  patientId: 5
+                  doctorId: 1
+                  symptoms: none
+                  initialDiagnosis: none
+                  diagnosisStatus: none
+                  bloodPressure: 13080
+                  weight: 90
+                  height: 190
+                  diagnosis: none
+        required: true
       tags:
         - /officeVisits
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value:
+                    dateOfVisit: '202323041225'
+                    patientId: 5
+                    doctorId: 1
+                    symptoms: none
+                    initialDiagnosis: none
+                    diagnosisStatus: none
+                    bloodPressure: 13080
+                    weight: 90
+                    height: 190
+                    diagnosis: none
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value: >-
+                    error: "Office visit has to have a valid patientId, doctorId, date of visit and other parameters!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value: 'message: "Could not fetch visits!"'
+          description: Internal Server Error
+      summary: Add a visit
+
+
+  /officeVisits{id}:
+    get:
+      tags:
+        - /officeVisits
+      parameters:
+        - name: id
+          in: path
+          description: ID of the visit that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value:
+                    dateOfVisit: '202323041225'
+                    patientId: 5
+                    doctorId: 1
+                    symptoms: none
+                    initialDiagnosis: none
+                    diagnosisStatus: none
+                    bloodPressure: 13080
+                    weight: 90
+                    height: 190
+                    diagnosis: none
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value: 'error: "Visit does not exist!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+              examples:
+                officeVisit:
+                  value: 'message: "Could not fetch visit!"'
+          description: Internal Server Error
+      summary: Get the visit by id
+      description: Gets the requested visit from the database.
+
+    put:
+      tags:
+        - /officeVisits
+      summary: Update an existing visit
+      description: Update an existing visit by id
+      operationId: updateOfficeVisit
+      requestBody:
+        description: Update an existent visit in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/office_visit'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/office_visit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/office_visit'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the visit that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/office_visit'
+        '400':
+          description: Office visit has to have a valid patientId, doctorId, date of visit and other parameters!
+        '404':
+          description: Visit does not exist!
+        '500':
+          description: Could not update visit!
+    delete:
+      tags:
+        - /officeVisits
+      summary: Delete visit by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deleteOfficeVisit
+      parameters:
+        - name: id
+          in: path
+          description: ID of the visit that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Visit succesfully deleted
+        '404':
+          description: Visit does not exist
+        '500':
+          description: Could not delete visit
+
+
   /patients:
     get:
       tags:
         - /patients
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value:
+                    name: Kati Karu
+                    address: Pärna 5
+                    phoneNumber: 45578921
+                    email: example@example.com
+                    insuranceHolderId: 1
+                    insuranceId: 1
+                    doctorId: 1
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value: 'error: "No patients currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value: 'message: "Could not fetch patients!"'
+          description: Internal Server Error
+      summary: Get all patients
+    description: Gets all the patients from the database.
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/patient'
+            examples:
+              patient:
+                value:
+                  name: Kati Karu
+                  address: Pärna 5
+                  phoneNumber: 45578921
+                  email: example@example.com
+                  insuranceHolderId: 1
+                  insuranceId: 1
+                  doctorId: 1
+        required: true
       tags:
         - /patients
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value:
+                    name: Kati Karu
+                    address: Pärna 5
+                    phoneNumber: 45578921
+                    email: example@example.com
+                    insuranceHolderId: 1
+                    insuranceId: 1
+                    doctorId: 1
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value: >-
+                    error: "Patient has to have a valid name, address, phoneNumber and other parameters!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value: 'message: "Could not fetch patients!"'
+          description: Internal Server Error
+      summary: Add a patient
+
+
+  /patients/{id}:
+    get:
+      tags:
+        - /patients
+      parameters:
+        - name: id
+          in: path
+          description: ID of the patient that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value:
+                    name: Kati Karu
+                    address: Pärna 5
+                    phoneNumber: 45578921
+                    email: example@example.com
+                    insuranceHolderId: 1
+                    insuranceId: 1
+                    doctorId: 1
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value: 'error: "Patient does not exist!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+              examples:
+                patient:
+                  value: 'message: "Could not fetch patient!"'
+          description: Internal Server Error
+      summary: Get the patient by id
+      description: Gets the requested patient from the database.
+
+    put:
+      tags:
+        - /patients
+      summary: Update an existing patient
+      description: Update an existing patient by id
+      operationId: updatePatient
+      requestBody:
+        description: Update an existent patient in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/patient'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/patient'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/patient'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the patient that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patient'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/patient'
+        '400':
+          description: Patient does not exist!
+        '404':
+          description: Patient has to have a valid name, address, phoneNumber and other parameters!
+        '500':
+          description: Could not update Patient!
+    delete:
+      tags:
+        - /patients
+      summary: Delete patient by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deletePatient
+      parameters:
+        - name: id
+          in: path
+          description: ID of the patient that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Patient succesfully deleted
+        '404':
+          description: Patient does not exist
+        '500':
+          description: Could not delete patient
+
   /prescriptions:
     get:
       tags:
         - /prescriptions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value:
+                    Id: 2
+                    datePrescribed: '202321041803'
+                    dosage: 10
+                    duration: 2
+                    refillable: true
+                    numberOfRefills: 4
+                    refillSize: 2
+                    reason: Raviks
+                    patientId: 1
+                    doctorId: 1
+                    drugId: 1
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value: 'error: "No prescriptions currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value: 'message: "Could not fetch prescriptions!"'
+          description: Internal Server Error
+      summary: Get all prescriptions
+    description: Gets all the prescriptions from the database.
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/prescription'
+            examples:
+              prescription:
+                value:
+                  Id: 2
+                  datePrescribed: '202321041803'
+                  dosage: 10
+                  duration: 2
+                  refillable: true
+                  numberOfRefills: 4
+                  refillSize: 2
+                  reason: Raviks
+                  patientId: 1
+                  doctorId: 1
+                  drugId: 1
+        required: true
       tags:
         - /prescriptions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value:
+                    Id: 2
+                    datePrescribed: '202321041803'
+                    dosage: 10
+                    duration: 2
+                    refillable: true
+                    numberOfRefills: 4
+                    refillSize: 2
+                    reason: Raviks
+                    patientId: 1
+                    doctorId: 1
+                    drugId: 1
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value: >-
+                    error: "Prescription has to have a valid prescribe date, dosage, duration, refill status, patientId, drugId and doctorId!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value: 'message: "Could not fetch prescriptions!"'
+          description: Internal Server Error
+      summary: Add a prescription
+
+
+  /prescriptions/{id}:
+    get:
+      tags:
+        - /prescriptions
+      parameters:
+        - name: id
+          in: path
+          description: ID of the prescription that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value:
+                    Id: 2
+                    datePrescribed: '202321041803'
+                    dosage: 10
+                    duration: 2
+                    refillable: true
+                    numberOfRefills: 4
+                    refillSize: 2
+                    reason: Raviks
+                    patientId: 1
+                    doctorId: 1
+                    drugId: 1
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value: 'error: "Prescription does not exist!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+              examples:
+                prescription:
+                  value: 'message: "Could not fetch prescription!"'
+          description: Internal Server Error
+      summary: Get the prescription by id
+      description: Gets the requested prescription from the database.
+
+    put:
+      tags:
+        - /prescriptions
+      summary: Update an existing prescription
+      description: Update an existing prescription by id
+      operationId: updatePrescription
+      requestBody:
+        description: Update an existent prescription in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/prescription'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/prescription'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/prescription'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the prescription that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/prescription'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/prescription'
+        '400':
+          description: Prescription does not exist!
+        '404':
+          description: Prescription has to have a valid prescribe date, dosage, duration, refill status, patientId, drugId and doctorId!
+        '500':
+          description: Could not update prescription!
+    delete:
+      tags:
+        - /prescriptions
+      summary: Delete prescription by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deletePrescription
+      parameters:
+        - name: id
+          in: path
+          description: ID of the prescription that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Prescription succesfully deleted
+        '404':
+          description: Prescription does not exist
+        '500':
+          description: Could not delete prescription
+
+
   /primaryDoctorHistory:
     get:
       tags:
         - /primaryDoctorHistory
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value:
+                    startDate: 202323041223
+                    doctorName: Kati Karu
+                    patientId: 1
+                    doctorId: 1
+                    endDate: 202323041250
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value: 'error: "No doctor history currently exists!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value: 'message: "Could not fetch histories!"'
+          description: Internal Server Error
+      summary: Get all histories
+    description: Gets all the histories from the database.
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/primary_doctor_history'
+            examples:
+              primaryDoctorHistory:
+                value:
+                  startDate: 202323041223
+                  doctorName: Kati Karu
+                  patientId: 1
+                  doctorId: 1
+                  endDate: 202323041250
+        required: true
       tags:
         - /primaryDoctorHistory
-  '/drugs/{id}':
-    get:
-      tags:
-        - /drugs
-    put:
-      tags:
-        - /drugs
-    delete:
-      tags:
-        - /drugs
-  '/hospitals/{id}':
-    get:
-      tags:
-        - /hospitals
-    put:
-      tags:
-        - /hospitals
-    delete:
-      tags:
-        - /hospitals
-  '/hospitalAffiliations/{date}':
-    get:
-      tags:
-        - /hospitalAffiliations
-    put:
-      tags:
-        - /hospitalAffiliations
-    delete:
-      tags:
-        - /hospitalAffiliations
-  '/insurances/{id}':
-    get:
-      tags:
-        - /insurances
-    put:
-      tags:
-        - /insurances
-    delete:
-      tags:
-        - /insurances
-  '/patients/{id}':
-    get:
-      tags:
-        - /patients
-    put:
-      tags:
-        - /patients
-    delete:
-      tags:
-        - /patients
-  '/prescriptions/{id}':
-    get:
-      tags:
-        - /prescriptions
-    put:
-      tags:
-        - /prescriptions
-    delete:
-      tags:
-        - /prescriptions
-  '/officeVisits/:patientId/:doctorId/:dateOfVisit':
-    get:
-      tags:
-        - /officeVisits
-    put:
-      tags:
-        - /officeVisits
-    delete:
-      tags:
-        - /officeVisits
-  '/primaryDoctorHistory/{id}':
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value:
+                    startDate: 202323041223
+                    doctorName: Kati Karu
+                    patientId: 1
+                    doctorId: 1
+                    endDate: 202323041250
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value: >-
+                    error: "DocHistory has to have a valid startDate, doctorName, doctorId and patientId!"
+          description: Bad Request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value: 'message: "Could not fetch histories!"'
+          description: Internal Server Error
+      summary: Add a history
+
+
+  /primaryDoctorHistory/{id}:
     get:
       tags:
         - /primaryDoctorHistory
+      parameters:
+        - name: id
+          in: path
+          description: ID of the history that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value:
+                    startDate: 202323041223
+                    doctorName: Kati Karu
+                    patientId: 1
+                    doctorId: 1
+                    endDate: 202323041250
+          description: OK
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value: 'error: "History does not exist!"'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+              examples:
+                primaryDoctorHistory:
+                  value: 'message: "Could not fetch history!"'
+          description: Internal Server Error
+      summary: Get the history by id
+      description: Gets the requested history from the database.
+
     put:
       tags:
         - /primaryDoctorHistory
+      summary: Update an existing history
+      description: Update an existing history by id
+      operationId: updateHistory
+      requestBody:
+        description: Update an existent history in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/primary_doctor_history'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/primary_doctor_history'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/primary_doctor_history'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the history that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/primary_doctor_history'
+        '400':
+          description: History does not exist!
+        '404':
+          description: DocHistory has to have a valid startDate, doctorName, doctorId and patientId!
+        '500':
+          description: Could not update history!
     delete:
       tags:
         - /primaryDoctorHistory
+      summary: Delete history by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deleteHistory
+      parameters:
+        - name: id
+          in: path
+          description: ID of the history that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: History succesfully deleted
+        '404':
+          description: History does not exist
+        '500':
+          description: Could not delete history
+
+
+
 components:
   schemas:
     doctor:
-      title: Root Type for doctor
+      title: doctor
       description: ''
       required:
         - address
@@ -297,7 +1948,7 @@ components:
         phoneNumber: 54482009
         address: Pärna 5
     drug:
-      title: Root Type for drug
+      title: drug
       description: ''
       required:
         - drugName
@@ -349,7 +2000,7 @@ components:
         drugUse: eat
         sideEffects: none
     hospital:
-      title: Root Type for hospital
+      title: hospital
       description: ''
       required:
         - Id
@@ -383,7 +2034,7 @@ components:
         location: Pärna 5
         contactInformation: hospital@hospital.ee
     hospital_affiliation:
-      title: Root Type for hospital_affiliation
+      title: hospital_affiliation
       description: ''
       required:
         - dateOfAffiliation
@@ -417,7 +2068,7 @@ components:
         doctorId: 1
         hospitalId: 2
     insurance:
-      title: Root Type for insurance
+      title: insurance
       description: ''
       required:
         - Id
@@ -442,7 +2093,7 @@ components:
         Id: 1
         insuranceCompanyName: Curio Insurance
     office_visit:
-      title: Root Type for office_visit
+      title: office_visit
       description: ''
       required:
         - patientId
@@ -532,7 +2183,7 @@ components:
         height: 190
         diagnosis: none
     patient:
-      title: Root Type for patient
+      title: patient
       description: ''
       required:
         - address
@@ -608,7 +2259,7 @@ components:
         insuranceId: 1
         doctorId: 1
     prescription:
-      title: Root Type for prescription
+      title: prescription
       description: ''
       required:
         - datePrescribed
@@ -710,7 +2361,7 @@ components:
         doctorId: 1
         drugId: 1
     primary_doctor_history:
-      title: Root Type for primary_doctor_history
+      title: primary_doctor_history
       description: ''
       required:
         - doctorId
@@ -760,5 +2411,5 @@ components:
             "doctorName": "Kati Karu",
             "patientId": 1,
             "doctorId": 2
-            "endDate": null
+            "endDate": 202323041250
         }
